@@ -12,7 +12,7 @@
         
     <link href="{{asset_url('backend/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset_url('backend/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" id="bs-default-stylesheet" />
-    <link href="{{asset_url('backend/css/app.min.css')}} " rel="stylesheet" type="text/css" id="app-default-stylesheet" />
+    <link href="{{asset_url('backend/css/app.min.css?v=0.1')}} " rel="stylesheet" type="text/css" id="app-default-stylesheet" />
     <link href="{{ asset_url('css/app.css') }}" rel="stylesheet">
 </head>
 <body class="@yield('bodyclass')">

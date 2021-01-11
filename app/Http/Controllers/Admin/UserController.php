@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
 use App\Role;
-use App\Terminal;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +16,7 @@ class UserController extends Controller
     {
         $this->uri = 'users';
         $this->title = 'User';
-        $this->role = [1, 2, 3];
+        $this->role = [1, 3, 4];
     }
     public function index()
     {
@@ -28,8 +27,7 @@ class UserController extends Controller
             $data['uri'] = $this->uri;
             if(is_admin())
             {
-                $data['roles'] = Role::orderBy('name', 'ASC')->get();
-                $data['terminals'] = Terminal::orderBy('name', 'ASC')->get();
+                $data['roles'] = Role::whereIn('id', $this->role)->orderBy('name', 'ASC')->get();
                 $data['lists'] = User::with('roles')->whereHas('roles', function($query){
                     $query->whereIn('roles.id', $this->role);
                 })->orderBy('id', 'DESC')->paginate(20);
@@ -38,17 +36,6 @@ class UserController extends Controller
                     $query->where('roles.id', 3);
                 })->where('owner', Auth::user()->id)->orderBy('id', 'DESC')->paginate(20);
                 $data['roles'] = Role::where('id', 3)->orderBy('name', 'ASC')->get();
-                $data['terminals'] = Terminal::where('terminal_id', Auth::user()->terminal)->orderBy('name', 'ASC')->get();
-            }
-            foreach($data['lists'] as $key=>$val)
-            {
-                $terminal = Terminal::where('terminal_id', $val->terminal)->first();
-                if($terminal)
-                {
-                    $data['lists'][$key]->terminal = $terminal->name;
-                }else{
-                    $data['lists'][$key]->terminal = '-';
-                }
             }
             return view('backend.'.$this->uri.'.list', $data);
         }else{
@@ -59,7 +46,7 @@ class UserController extends Controller
     {
         if(is_admin() || is_subadmin())
         {
-            if(!empty($request->get('query')) || !empty($request->get('orderby')) || !empty($request->get('role')) || !empty($request->get('terminal')))
+            if(!empty($request->get('query')) || !empty($request->get('orderby')) || !empty($request->get('role')))
             {
                 $model = User::with('roles');
                 if($request->get('role'))
@@ -87,10 +74,6 @@ class UserController extends Controller
                                     ->orWhere('email', 'like', '%'.strip_tags($request->get('query')).'%');
                     });
                 }
-                if(!empty($request->get('terminal')))
-                {
-                    $model->where('terminal', $request->get('terminal'));
-                }
                 if($request->get('orderby'))
                 {
                     if($request->get('order') == 'asc')
@@ -107,23 +90,11 @@ class UserController extends Controller
                 $data['pagetitle'] = "Pencarian ".$this->title;
                 $data['uri'] = $this->uri;
                 if(is_admin()){
-                    $data['roles'] = Role::orderBy('name', 'ASC')->get();
-                    $data['terminals'] = Terminal::orderBy('name', 'ASC')->get();
+                    $data['roles'] = Role::whereIn('id', $this->role)->orderBy('name', 'ASC')->get();
                     $data['lists'] = $model->paginate(20);
                 }else{
                     $data['roles'] = Role::where('id', 3)->orderBy('name', 'ASC')->get();
-                    $data['terminals'] = Terminal::where('terminal_id', Auth::user()->terminal)->orderBy('name', 'ASC')->get();
                     $data['lists'] = $model->where('owner', Auth::user()->id)->paginate(20);
-                }
-                foreach($data['lists'] as $key=>$val)
-                {
-                    $terminal = Terminal::where('terminal_id', $val->terminal)->first();
-                    if($terminal)
-                    {
-                        $data['lists'][$key]->terminal = $terminal->name;
-                    }else{
-                        $data['lists'][$key]->terminal = '-';
-                    }
                 }
                 return view('backend.'.$this->uri.'.list', $data);
             }else{
@@ -141,11 +112,9 @@ class UserController extends Controller
             $data['pagetitle'] = "Tambah ".$this->title;
             $data['uri'] = $this->uri;
             if(is_admin()){
-                $data['roles'] = Role::orderBy('name', 'ASC')->get();
-                $data['terminals'] = Terminal::orderBy('name', 'ASC')->get();
+                $data['roles'] = Role::whereIn('id', $this->role)->orderBy('name', 'ASC')->get();
             }else{
                 $data['roles'] = Role::where('id', 3)->orderBy('name', 'ASC')->get();
-                $data['terminals'] = Terminal::where('terminal_id', Auth::user()->terminal)->orderBy('name', 'ASC')->get();
             }
             return view('backend.'.$this->uri.'.create', $data);
         }else{
@@ -161,7 +130,6 @@ class UserController extends Controller
                     'name' => ['required'],
                     'email' => ['required','unique:users'],
                     'role' => ['required'],
-                    'terminal' => ['required'],
                     'password' => ['required', 'min:8'],
                     'confirm_password' => ['required', 'same:password'],
                 ];
@@ -172,7 +140,6 @@ class UserController extends Controller
                 'email.required' => 'Email tidak boleh kosong',
                 'email.unique' => 'Eama sudah terdaftar',
                 'role.required' => 'Group harus dipilih',
-                'terminal.required' => 'Terminal harus dipilih',
                 'password.required' => 'Password tidak boleh kosong',
                 'password.min' => 'Password minimal 8 karakter',
                 'confirm_password.required' => 'Konfirmasi Password tidak boleh kosong',
@@ -183,9 +150,7 @@ class UserController extends Controller
             $user->name = trim($request->name);
             $user->username = Str::slug(trim($request->username), '.');
             $user->email = trim($request->email);
-            $user->terminal = trim($request->terminal);
             $user->password = Hash::make($request->input('password'));
-            $user->owner = Auth::user()->id;
     
             if($user->save())
             {
@@ -212,11 +177,9 @@ class UserController extends Controller
             $data['pagetitle'] = "Edit ".$this->title;
             $data['uri'] = $this->uri;
             if(is_admin()){
-                $data['roles'] = Role::orderBy('name', 'ASC')->get();
-                $data['terminals'] = Terminal::orderBy('name', 'ASC')->get();
+                $data['roles'] = Role::whereIn('id', $this->role)->orderBy('name', 'ASC')->get();
             }else{
                 $data['roles'] = Role::where('id', 3)->orderBy('name', 'ASC')->get();
-                $data['terminals'] = Terminal::where('terminal_id', Auth::user()->terminal)->orderBy('name', 'ASC')->get();
             }
             return view('backend.'.$this->uri.'.edit', $data);
         }else{
@@ -225,20 +188,18 @@ class UserController extends Controller
     }
     public function update(Request $request, User $user)
     {
-        if(is_admin() || is_subadmin() || is_cs())
+        if(is_admin() || is_subadmin() || is_cs()  || is_wd())
         {
             $validasi =[
                     'email' => ['required','unique:users,email,'.$user->id.',id'],
                     'name' => ['required'],
                     'role' => ['required'],
-                    'terminal' => ['required'],
                 ];
             $msg = [
                 'email.required' => 'Email tidak boleh kosong',
                 'email.unique' => 'Email sudah terdaftar',
                 'name.required' => 'Nama tidak boleh kosong',
                 'role.required' => 'Group harus dipilih',
-                'terminal.required' => 'Terminal harus dipilih',
                 'password.required' => 'Password tidak boleh kosong',
                 'password.min' => 'Password minimal 8 karakter',
                 'confirm_password.required' => 'Konfirmasi Password tidak boleh kosong',
@@ -252,13 +213,12 @@ class UserController extends Controller
 
             $user->name = trim($request->name);
             $user->email = trim($request->email);
-            $user->terminal = trim($request->terminal);
     
             if($user->save())
             {
                 $user->roles()->sync($request->role);
                 $request->session()->flash('success', 'Sukses update '.$this->title);
-                if(is_cs())
+                if(is_cs() || is_wd())
                 {
                     return redirect()->route('admin.home');
                 }
@@ -272,18 +232,16 @@ class UserController extends Controller
     }
     public function profile(Request $request)
     {
-        if(is_admin() || is_subadmin() || is_cs())
+        if(is_admin() || is_subadmin() || is_cs() || is_wd())
         {
             $data['row'] = User::find(Auth::user()->id);
             $data['title'] = "Profile ".Auth::user()->name." - ".env('APP_NAME', 'Awesome Website');
             $data['pagetitle'] = "Profile ".Auth::user()->name;
             $data['uri'] = $this->uri;
-            if(is_admin()){
+            if(is_admin() || is_subadmin()){
                 $data['roles'] = Role::orderBy('name', 'ASC')->get();
-                $data['terminals'] = Terminal::orderBy('name', 'ASC')->get();
             }else{
-                $data['roles'] = Role::whereIn('id', [2, 3])->orderBy('name', 'ASC')->get();
-                $data['terminals'] = Terminal::where('terminal_id', Auth::user()->terminal)->orderBy('name', 'ASC')->get();
+                $data['roles'] = Role::whereIn('id', [3, 4])->orderBy('name', 'ASC')->get();
             }
             return view('backend.'.$this->uri.'.edit', $data);
         }else{
@@ -319,8 +277,8 @@ class UserController extends Controller
         if(is_admin() || is_subadmin())
         {
             $id = explode(",", $request->ids);            
-            $Users = User::find($id);
-            foreach($Users as $key=> $user)
+            $users = User::find($id);
+            foreach($users as $key=> $user)
             {
                 if($user->id == 1)
                 {

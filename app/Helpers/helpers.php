@@ -33,6 +33,17 @@ function is_cs()
     }
     return false;
 }
+function is_wd()
+{
+    if(Auth::check())
+    {
+        if(Auth::user()->hasRole('Tim Withdraw'))
+        {
+            return true;
+        }
+    }
+    return false;
+}
 function is_login()
 {
     if(Auth::check())

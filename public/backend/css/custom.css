@@ -1,18 +1,18 @@
 .checkbox-amdbtn input[type="checkbox"]:checked + label::before {
-	background-color: #006ab1;
-	border-color: #006ab1;
+	background-color: #437512;
+	border-color: #437512;
 }
 .checkbox-amdbtn input[type="checkbox"]:checked + label::after {
 	border-color: #fff;
 }
 .btn-amdbtn {
 	color: #fff;
-	background-color: #006ab1;
-	border-color: #006ab1;
+	background-color: #437512;
+	border-color: #437512;
 	box-shadow: 0 0 0 rgba(50, 58, 70, 0.5);
 }
 .text-amdbtn {
-	color: #006ab1;
+	color: #437512;
 }
 table.mytable thead .sorting{
 	position: relative;

@@ -1,6 +1,6 @@
 @extends('backend.layout.app')
 @section('css')
-    <link href="{{asset_url('backend/libs/select2/select2.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('backend/libs/select2/select2.min.css')}}" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -27,8 +27,8 @@
                                 @csrf
                                 @method('POST')
                                 <div class="form-group">
-                                    <label for="name">Nama</label>
-                                    <input type="text" class="form-control @if($errors->has('name')) is-invalid @endif" id="name"  name="name"  placeholder="Rumah" value="{{ old('name') }}">                                    
+                                    <label for="name">Nama Bank</label>
+                                    <input type="text" class="form-control @if($errors->has('name')) is-invalid @endif" id="name"  name="name"  placeholder="BNI" value="{{ old('name') }}">                                    
                                     @error('name')
                                         <div class="invalid-feedback" role="feedback">
                                             {{ $message }}
@@ -36,21 +36,27 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="status">Status</label>
-                                    <select id="statuss" name="status" class="form-control @if($errors->has('status')) is-invalid @endif"  data-toggle="select2">
-                                        <option value="0">Non Aktif</option>
-                                        <option value="1" @if (old('status') == 1) selected @endif>Aktif</option>
-                                    </select>
-                                    @error('status')
+                                    <label for="bankname">Atas Nama Bank</label>
+                                    <input type="text" class="form-control @if($errors->has('bankname')) is-invalid @endif" id="bankname"  name="bankname"  placeholder="Steve Job" value="{{ old('bankname') }}">                                    
+                                    @error('bankname')
                                         <div class="invalid-feedback" role="feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="description">Deskripsi</label>
-                                    <textarea class="form-control @if($errors->has('description')) is-invalid @endif" id="description"  name="description"  placeholder="Berisi tentang listing rumah" rows="3">{{ old('description') }}</textarea>
-                                    @error('description')
+                                    <label for="rec">No. Rekening Bank</label>
+                                    <input type="text" class="form-control @if($errors->has('rec')) is-invalid @endif" id="rec"  name="rec"  placeholder="562245865552" value="{{ old('rec') }}">                                    
+                                    @error('rec')
+                                        <div class="invalid-feedback" role="feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="saldo">Saldo</label>
+                                    <input type="text" class="form-control @if($errors->has('saldo')) is-invalid @endif" id="saldo"  name="saldo"  placeholder="5.000.000" value="{{ old('saldo') }}" data-toggle="input-mask" data-mask-format="000.000.000.000.000" data-reverse="true" >                                    
+                                    @error('saldo')
                                         <div class="invalid-feedback" role="feedback">
                                             {{ $message }}
                                         </div>
@@ -66,10 +72,21 @@
     </div>
 @endsection
 @section('script')
-<script src="{{asset_url('backend/libs/select2/select2.min.js')}}"></script>
+<script src="{{asset('backend/libs/select2/select2.min.js')}}"></script>
+<script src="{{asset('backend/libs/jquery-mask-plugin/jquery-mask-plugin.min.js')}}"></script>
 <script>
     $(document).ready(function(){
         $('select[data-toggle="select2"]').select2();
+        $('[data-toggle="input-mask"]').each(function (idx, obj) {
+            var maskFormat = $(obj).data("maskFormat");
+            var reverse = $(obj).data("reverse");
+            if (reverse != null)
+            {
+                $(obj).mask(maskFormat, {'reverse': reverse});
+            }else{
+                $(obj).mask(maskFormat);
+            }
+        });
     });
 </script>
 @endsection

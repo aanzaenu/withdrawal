@@ -25,23 +25,20 @@ Auth::routes([
 Route::get('/home', function(){
     return redirect()->route('admin.home');
 });
-Route::post('/inbox/apdet', 'InboxController@apdet')->name('inbox.apdet');
-Route::post('/inbox/unduh', 'InboxController@unduh')->name('inbox.unduh');
 
 Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function(){
     Route::get('/', 'DashboardController@index')->name('home');
-
-    Route::resource('inboxes','InboxController', ['except' => ['show', 'store', 'add']]);
-    Route::any('/inboxes/search','InboxController@search')->name('inboxes.search');
-    Route::any('/inboxes/search','InboxController@search')->name('inboxes.search');
-    Route::post('/inboxes/deletemass','InboxController@deletemass')->name('inboxes.deletemass');
-    
+        
     Route::resource('users','UserController', ['except' => ['show']]);
     Route::any('/users/search','UserController@search')->name('users.search');
     Route::post('/users/deletemass','UserController@deletemass')->name('users.deletemass');
     Route::get('/users/profile', 'UserController@profile')->name('users.profile');
-
-    Route::resource('terminals','TerminalController', ['except' => ['show']]);
-    Route::any('/terminals/search','TerminalController@search')->name('terminals.search');
-    Route::post('/terminals/deletemass','TerminalController@deletemass')->name('terminals.deletemass');
+        
+    Route::resource('banks','BankController', ['except' => ['show']]);
+    Route::any('/banks/search','BankController@search')->name('banks.search');
+    Route::post('/banks/deletemass','BankController@deletemass')->name('banks.deletemass');
+        
+    Route::resource('withdrawals','WithdrawalController', ['except' => ['show']]);
+    Route::any('/withdrawals/search','WithdrawalController@search')->name('withdrawals.search');
+    Route::post('/withdrawals/deletemass','WithdrawalController@deletemass')->name('withdrawals.deletemass');
 });

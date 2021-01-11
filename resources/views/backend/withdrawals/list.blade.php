@@ -37,7 +37,9 @@
                                                 <input type="hidden" name="ids"/>
                                                 <div class="input-group-append">
                                                     <button class="btn btn-amdbtn waves-effect waves-light" type="submit">Eksekusi</button>
-                                                    <a href="{{ route('admin.'.$uri.'.create') }}" class="btn btn-dark waves-effect waves-light">Tambah Data</a>
+                                                    @if (!is_wd())
+                                                        <a href="{{ route('admin.'.$uri.'.create') }}" class="btn btn-dark waves-effect waves-light">Request Witdrawal</a>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -52,11 +54,17 @@
                                         <div class="col-lg-9 mb-3">
                                             <div class="input-group">
                                                 <input type="text" name="query" class="form-control" placeholder="Cari Sesuatu" value="{{ request()->get('query') }}"/>
-                                                @if (is_admin())
-                                                    <select name="role" class="custom-select">
-                                                        <option value="">Semua Group</option>
-                                                        @foreach ($roles as $item)
-                                                            <option value="{{ $item->id }}" {{ $item->id == request()->get('role') ? 'selected' : ''}}>{{ $item->name }}</option>
+                                                @if (!is_cs())
+                                                    <select name="bank" class="custom-select">
+                                                        <option value="">Semua Bank</option>
+                                                        @foreach ($banks as $item)
+                                                            <option value="{{ $item->id }}" {{ $item->id == request()->get('bank') ? 'selected' : ''}}>{{ $item->name.' - '.$item->bankname  }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    <select name="operator" class="custom-select">
+                                                        <option value="">Semua Operator</option>
+                                                        @foreach ($operators as $item)
+                                                            <option value="{{ $item->id }}" {{ $item->id == request()->get('operator') ? 'selected' : ''}}>{{ $item->name }}</option>
                                                         @endforeach
                                                     </select>
                                                 @endif
@@ -75,12 +83,14 @@
                         <table class="table mytable table-hover mb-0">
                             <thead>
                                 <tr>
-                                    <th>
-                                        <div class="checkbox checkbox-amdbtn checkbox-single">
-                                            <input type="checkbox" class="cekall">
-                                            <label></label>
-                                        </div>                                        
-                                    </th>
+                                    @if (!is_cs())
+                                        <th>
+                                            <div class="checkbox checkbox-amdbtn checkbox-single">
+                                                <input type="checkbox" class="cekall">
+                                                <label></label>
+                                            </div>                                        
+                                        </th>
+                                    @endif
                                     <?php 
                                         $uris = url()->current();
                                         $order_by = request()->get('orderby');
@@ -100,60 +110,89 @@
                                         {
                                             $kueri = 'query='.request()->get('query').'&';
                                         }
-                                        $role = '';
-                                        if(!empty(request()->get('role')))
+                                        $bank = '';
+                                        if(!empty(request()->get('bank')))
                                         {
-                                            $role = 'role='.request()->get('role').'&';
+                                            $bank = 'bank='.request()->get('bank').'&';
+                                        }
+                                        $operator = '';
+                                        if(!empty(request()->get('operator')))
+                                        {
+                                            $operator = 'operator='.request()->get('operator').'&';
                                         }
                                     ;?>
-                                    <th class="sorting @if($order_by =='username') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
-                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$kueri.$role.'orderby=username&order='.$urut }}">
-                                            Username
+                                    @if (!is_cs())
+                                        <th>
+                                            Operator
+                                        </th>                                        
+                                    @endif
+                                    <th class="sorting @if($order_by =='bank') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
+                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$bank.$operator.'orderby=bank&order='.$urut }}">
+                                            Nama dan Rec
                                         </a>
                                     </th>
-                                    <th class="sorting @if($order_by =='name') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
-                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$kueri.$role.'orderby=name&order='.$urut }}">
-                                            Nama
+                                    <th class="sorting @if($order_by =='nominal') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
+                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$bank.$operator.'orderby=nominal&order='.$urut }}">
+                                            Nominal
                                         </a>
                                     </th>
-                                    <th class="sorting @if($order_by =='email') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
-                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$kueri.$role.'orderby=email&order='.$urut }}">
-                                            Email
+                                    <th>Bank</th>
+                                    <th class="sorting @if($order_by =='time') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
+                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$bank.$operator.'orderby=time&order='.$urut }}">
+                                            Waktu Transfer
                                         </a>
                                     </th>
-                                    <th>Group</th>
-                                    <th>Aksi</th>
+                                    <th>Status</th>
+                                    @if (!is_cs())
+                                        <th>Aksi</th>                                        
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($lists as $key=>$list)
                                 <tr class="rows-{{ $list->id }}">
-                                    <th scope="row">
-                                        <div class="checkbox checkbox-amdbtn checkbox-single">
-                                            <input type="checkbox" name="ceking" data-id="{{ $list->id }}">
-                                            <label></label>
-                                        </div>
-                                    </th>
-                                    <td>{{ $list->username }}</td>
-                                    <td>{{ $list->name }}</td>
-                                    <td>{{ $list->email }}</td>
-                                    <td>{{ $list->roles()->first()->name }}</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-amdbtn btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="fe-more-horizontal"></i>
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <a class="dropdown-item" href="{{ route('admin.'.$uri.'.edit', $list->id) }}">Edit</a>
-                                                <div class="dropdown-divider"></div>                                              
-                                                <form action="{{ route('admin.'.$uri.'.destroy', $list->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="dropdown-item text-danger">Delete</button>
-                                                </form>
+                                    @if (!is_cs())
+                                        <th scope="row">
+                                            <div class="checkbox checkbox-amdbtn checkbox-single">
+                                                <input type="checkbox" name="ceking" data-id="{{ $list->id }}">
+                                                <label></label>
                                             </div>
-                                        </div>
+                                        </th>
+                                        <td>{{ $list->op ? $list->op->name : '-' }}</td>
+                                    @endif
+                                    <td>{!! $list->bank.' - '.$list->bankname.'<br/>'.$list->bankrec !!}</td>
+                                    <td>Rp. {{ number_format($list->nominal) }}</td>
+                                    <td>{{ $list->banks()->first() ? $list->banks()->first()->name : '-' }}</td>
+                                    <td>{{ $list->time ? date('d, M Y H:i', strtotime($list->time)) : '-' }}</td>
+                                    <td>
+                                        @if ($list->status == 0)
+                                        <span class="rounded px-2 badge-sm btn-danger" style="white-space: nowrap">
+                                            Belum Diproses
+                                        </span>
+                                        @else
+                                        <span class="rounded px-2 badge btn-amdbtn" style="white-space: nowrap">
+                                            Done
+                                        </span>
+                                        @endif
                                     </td>
+                                    @if (!is_cs())
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-amdbtn btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fe-more-horizontal"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" href="{{ route('admin.'.$uri.'.edit', $list->id) }}">Edit</a>
+                                                    <div class="dropdown-divider"></div>                                              
+                                                    <form action="{{ route('admin.'.$uri.'.destroy', $list->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="dropdown-item text-danger">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </td>                                        
+                                    @endif
                                 </tr>
                                 @endforeach
                             </tbody>

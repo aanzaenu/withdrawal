@@ -72,7 +72,7 @@
                                             <input type="checkbox" class="cekall">
                                             <label></label>
                                         </div>                                        
-                                    </th>                                    
+                                    </th>
                                     <?php 
                                         $uris = url()->current();
                                         $order_by = request()->get('orderby');
@@ -93,14 +93,24 @@
                                             $kueri = 'query='.request()->get('query').'&';
                                         }
                                     ;?>
-                                    <th class="sorting @if($order_by =='terminal_id') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
-                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$kueri.'orderby=terminal_id&order='.$urut }}">
-                                            Terminal ID
-                                        </a>
-                                    </th>
                                     <th class="sorting @if($order_by =='name') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
                                         <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$kueri.'orderby=name&order='.$urut }}">
                                             Nama
+                                        </a>
+                                    </th>
+                                    <th class="sorting @if($order_by =='bankname') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
+                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$kueri.'orderby=bankname&order='.$urut }}">
+                                            Atas Nama Bank
+                                        </a>
+                                    </th>
+                                    <th class="sorting @if($order_by =='rec') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
+                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$kueri.'orderby=rec&order='.$urut }}">
+                                            No. Rekening
+                                        </a>
+                                    </th>
+                                    <th class="sorting @if($order_by =='saldo') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
+                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$kueri.'orderby=saldo&order='.$urut }}">
+                                            Saldo
                                         </a>
                                     </th>
                                     <th>Aksi</th>
@@ -115,8 +125,10 @@
                                             <label></label>
                                         </div>
                                     </th>
-                                    <td>{{ $list->terminal_id }}</td>
                                     <td>{{ $list->name }}</td>
+                                    <td>{{ $list->bankname }}</td>
+                                    <td>{{ $list->rec }}</td>
+                                    <td>Rp. {{ number_format($list->saldo) }}</td>
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-amdbtn btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

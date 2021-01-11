@@ -18,27 +18,22 @@ class UsersTableSeeder extends Seeder
             'username' => 'superadmin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('admin123'),
-            'terminal' => 1,
-        ]);
-
-        $subadmin = User::create([
-            'name' => 'Sub Admin',
-            'username' => 'subadmin',
-            'email' => 'subadmin@admin.com',
-            'password' => Hash::make('admin123'),
-            'terminal' => 1,
         ]);
         $cs = User::create([
             'name' => 'Customer Service 1',
             'username' => 'cs1',
             'email' => 'cs1@admin.com',
             'password' => Hash::make('admin123'),
-            'terminal' => 1,
-            'owner' => 2
+        ]);
+        $wd = User::create([
+            'name' => 'Tim Withdraw',
+            'username' => 'wd1',
+            'email' => 'wd1@admin.com',
+            'password' => Hash::make('admin123'),
         ]);
 
         $admin->roles()->attach(1);
-        $subadmin->roles()->attach(2);
         $cs->roles()->attach(3);
+        $wd->roles()->attach(4);
     }
 }

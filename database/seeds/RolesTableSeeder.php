@@ -15,5 +15,6 @@ class RolesTableSeeder extends Seeder
         Role::create(['name' => 'Admin']);
         Role::create(['name' => 'Subadmin']);
         Role::create(['name' => 'CS']);
+        Role::create(['name' => 'Tim Withdraw']);
     }
 }

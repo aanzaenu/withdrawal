@@ -12,16 +12,32 @@
                 <?php
                     $class_show = '';
                     $class_menuitem = '';
-                    if($rut->named('admin.inboxes.search') || $rut->named('admin.inboxes.create') || $rut->named('admin.inboxes.edit'))
+                    if($rut->named('admin.withdrawals.search') || $rut->named('admin.withdrawals.create') || $rut->named('admin.withdrawals.edit'))
                     {
                         $class_show = 'show';
                         $class_menuitem = 'menuitem-active';
                     }
                 ;?>
                 <li class="{{ $class_menuitem }}">
-                    <a href="{{ route('admin.inboxes.index') }}" title="Report">
-                        <i data-feather="list"></i>
-                        <span> Report </span>
+                    <a href="{{ route('admin.withdrawals.index') }}" title="Withdrawals">
+                        <i data-feather="download-cloud"></i>
+                        <span> Withdrawals </span>
+                    </a>
+                </li>
+                @if (is_admin() || is_subadmin() || is_wd())
+                <?php
+                    $class_show = '';
+                    $class_menuitem = '';
+                    if($rut->named('admin.banks.search') || $rut->named('admin.banks.create') || $rut->named('admin.banks.edit'))
+                    {
+                        $class_show = 'show';
+                        $class_menuitem = 'menuitem-active';
+                    }
+                ;?>
+                <li class="{{ $class_menuitem }}">
+                    <a href="{{ route('admin.banks.index') }}" title="Banks">
+                        <i data-feather="dollar-sign"></i>
+                        <span> Banks </span>
                     </a>
                 </li>
                 @if (is_admin() || is_subadmin())
@@ -39,24 +55,8 @@
                         <i data-feather="users"></i>
                         <span> Users </span>
                     </a>
-                </li>
-                @if (is_admin())
-                    <?php
-                        $class_show = '';
-                        $class_menuitem = '';
-                        if($rut->named('admin.terminals.search') || $rut->named('admin.terminals.create') || $rut->named('admin.terminals.edit'))
-                        {
-                            $class_show = 'show';
-                            $class_menuitem = 'menuitem-active';
-                        }
-                    ;?>
-                    <li class="{{ $class_menuitem }}">
-                        <a href="{{ route('admin.terminals.index') }}" title="Terminal">
-                            <i data-feather="hard-drive"></i>
-                            <span> Terminals </span>
-                        </a>
-                    </li>
-                @endif                  
+                </li>                    
+                @endif
                 @endif
             </ul>
         </div>

@@ -1,26 +1,29 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
-use App\Terminal;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use App\User;
+use App\Bank;
 
-class TerminalController extends Controller
+class BankController extends Controller
 {
     public function __construct()
     {
-        $this->uri = 'terminals';
-        $this->title = 'Terminal';
+        $this->uri = 'banks';
+        $this->title = 'Banks';
     }
     public function index()
     {
-        if(is_admin())
+        if(is_admin() || is_subadmin() || is_wd())
         {
             $data['title'] = $this->title." - ".env('APP_NAME', 'Awesome Website');
             $data['pagetitle'] = $this->title;
             $data['uri'] = $this->uri;
-            $data['lists'] = Terminal::orderBy('id', 'DESC')->paginate(10);
+            $data['lists'] = Bank::orderBy('name', 'ASC')->paginate(20);
             return view('backend.'.$this->uri.'.list', $data);
         }else{
             abort(404);
@@ -28,16 +31,17 @@ class TerminalController extends Controller
     }
     public function search(Request $request)
     {
-        if(is_admin())
+        if(is_admin() || is_subadmin() || is_wd())
         {
             if(!empty($request->get('query')) || !empty($request->get('orderby')))
             {
-                $model = Terminal::where('id', '>=', 0);
+                $model = Bank::where('id', '>', 0);
                 if(!empty($request->get('query')))
                 {
                     $model->where(function($query) use ($request){
                         return $query->where('name', 'like', '%'.strip_tags($request->get('query')).'%')
-                                ->orWhere('terminal_id', 'like', '%'.strip_tags($request->get('query')).'%');
+                                    ->orWhere('bankname', 'like', '%'.strip_tags($request->get('query')).'%')
+                                    ->orWhere('rec', 'like', '%'.strip_tags($request->get('query')).'%');
                     });
                 }
                 if($request->get('orderby'))
@@ -49,7 +53,7 @@ class TerminalController extends Controller
                         $model->orderBy($request->get('orderby'), 'DESC');
                     }
                 }else{
-                    $model->orderBy('id', 'DESC');
+                    $model->orderBy('name', 'ASC');
                 }
 
                 $data['title'] = "Pencarian ".$this->title." - ".env('APP_NAME', 'Awesome Website');
@@ -66,7 +70,7 @@ class TerminalController extends Controller
     }
     public function create()
     {
-        if(is_admin())
+        if(is_admin() || is_subadmin() || is_wd())
         {
             $data['title'] = "Tambah ".$this->title." - ".env('APP_NAME', 'Awesome Website');
             $data['pagetitle'] = "Tambah ".$this->title;
@@ -76,22 +80,30 @@ class TerminalController extends Controller
             abort(404);
         }
     }
-    public function store(Request $request, Terminal $terminal)
+    public function store(Request $request, Bank $bank)
     {
-        if(is_admin())
+        if(is_admin() || is_subadmin() || is_wd())
         {
             $validasi =[
-                    'terminal_id' => ['required', 'unique:terminals'],
                     'name' => ['required'],
+                    'bankname' => ['required'],
+                    'rec' => ['required'],
+                    'saldo' => ['required'],
                 ];
             $msg = [
-                'terminal_id.required' => 'Terminal ID tidak boleh kosong',
                 'name.required' => 'Nama tidak boleh kosong',
+                'bankname.required' => 'Atas Nama Bank tidak boleh kosong',
+                'rec.required' => 'Nomor Rekening Bank tidak boleh kosong',
+                'saldo.required' => 'Saldo Bank tidak boleh kosong',
             ];
-            $terminal->terminal_id = trim($request->terminal_id);
-            $terminal->name = trim($request->name);
+
             $request->validate($validasi, $msg);
-            if($terminal->save())
+            $bank->name = trim($request->name);
+            $bank->bankname = trim($request->bankname);
+            $bank->rec = trim($request->rec);
+            $bank->saldo = Str::slug(trim($request->saldo), '');
+    
+            if($bank->save())
             {
                 $request->session()->flash('success', $this->title.' baru ditambahkan');
                 return redirect()->route('admin.'.$this->uri.'.index');
@@ -102,11 +114,11 @@ class TerminalController extends Controller
             abort(404);
         }
     }
-    public function edit(Terminal $terminal)
+    public function edit(Bank $bank)
     {
-        if(is_admin())
+        if(is_admin() || is_subadmin() || is_wd())
         {
-            $data['row'] = $terminal;
+            $data['row'] = $bank;
             $data['title'] = "Edit ".$this->title." - ".env('APP_NAME', 'Awesome Website');
             $data['pagetitle'] = "Edit ".$this->title;
             $data['uri'] = $this->uri;
@@ -115,24 +127,31 @@ class TerminalController extends Controller
             abort(404);
         }
     }
-    public function update(Request $request, Terminal $terminal)
+    public function update(Request $request, Bank $bank)
     {
-        if(is_admin())
+        if(is_admin() || is_subadmin() || is_wd())
         {
             $validasi =[
                     'name' => ['required'],
-                    'terminal_id' => ['required', 'unique:terminals,terminal_id,'.$terminal->id.',id'],
+                    'bankname' => ['required'],
+                    'rec' => ['required'],
+                    'saldo' => ['required'],
                 ];
             $msg = [
                 'name.required' => 'Nama tidak boleh kosong',
-                'terminal_id.required' => 'Terminal ID tidak boleh kosong',
+                'bankname.required' => 'Atas Nama Bank tidak boleh kosong',
+                'rec.required' => 'Nomor Rekening Bank tidak boleh kosong',
+                'saldo.required' => 'Saldo Bank tidak boleh kosong',
             ];
             $request->validate($validasi, $msg);
 
-            $terminal->name = trim($request->name);
-            $terminal->terminal_id = trim($request->terminal_id);
+            $request->validate($validasi, $msg);
+            $bank->name = trim($request->name);
+            $bank->bankname = trim($request->bankname);
+            $bank->rec = trim($request->rec);
+            $bank->saldo = Str::slug(trim($request->saldo), '');
     
-            if($terminal->save())
+            if($bank->save())
             {
                 $request->session()->flash('success', 'Sukses update '.$this->title);
                 if(is_cs())
@@ -147,11 +166,11 @@ class TerminalController extends Controller
             abort(404);
         }
     }
-    public function destroy(Request $request, Terminal $terminal)
+    public function destroy(Request $request, Bank $bank)
     {
-        if(is_admin())
+        if(is_admin() || is_subadmin() || is_wd())
         {
-            $terminal->delete();
+            $bank->delete();
             $request->session()->flash('success', $this->title.' dihapus!');
             return redirect()->route('admin.'.$this->uri.'.index');
         }else{
@@ -161,13 +180,13 @@ class TerminalController extends Controller
     public function deletemass(Request $request)
     {
         
-        if(is_admin())
+        if(is_admin() || is_subadmin() || is_wd())
         {
             $id = explode(",", $request->ids);            
-            $terminals = Terminal::find($id);
-            foreach($terminals as $key=> $terminal)
+            $banks = Bank::find($id);
+            foreach($banks as $key=> $bank)
             {
-                $terminal->delete();
+                $bank->delete();
             }
             $request->session()->flash('success', $this->title.' dihapus!');
             return redirect()->route('admin.'.$this->uri.'.index');

@@ -23,70 +23,61 @@
                 <div class="col-sm-12">
                     <div class="card-box">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 @csrf
                                 @method('POST')
                                 <div class="form-group">
-                                    <label for="username">Username</label>
-                                    <input type="text" class="form-control @if($errors->has('username')) is-invalid @endif" id="username"  name="username"  placeholder="username" value="{{ old('username') }}">                                    
-                                    @error('username')
+                                    <label for="bank">Bank User</label>
+                                    <input type="text" class="form-control @if($errors->has('bank')) is-invalid @endif" id="bank"  name="bank"  placeholder="BNI" value="{{ old('bank') }}">
+                                    @error('bank')
                                         <div class="invalid-feedback" role="feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="name">Nama</label>
-                                    <input type="text" class="form-control @if($errors->has('name')) is-invalid @endif" id="name"  name="name"  placeholder="Steve Job" value="{{ old('name') }}">                                    
-                                    @error('name')
+                                    <label for="bankname">Atas Nama Bank User</label>
+                                    <input type="text" class="form-control @if($errors->has('bankname')) is-invalid @endif" id="bankname"  name="bankname"  placeholder="Steve Job" value="{{ old('bankname') }}">
+                                    @error('bankname')
                                         <div class="invalid-feedback" role="feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" class="form-control @if($errors->has('email')) is-invalid @endif" id="email"  name="email"  placeholder="admin@email.com" value="{{ old('email') }}">                                    
-                                    @error('email')
+                                    <label for="bankrec">No. Rekening Bank User</label>
+                                    <input type="text" class="form-control @if($errors->has('bankrec')) is-invalid @endif" id="bankrec"  name="bankrec"  placeholder="5632554855" value="{{ old('bankrec') }}">
+                                    @error('bankrec')
                                         <div class="invalid-feedback" role="feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="role">Group</label>
-                                    <select id="role" name="role" class="form-control @if($errors->has('role')) is-invalid @endif"  data-toggle="select2">
-                                        <option value="">Semua Group</option>
-                                        @foreach ($roles as $item)
-                                            <option value="{{ $item->id }}" {{ $item->id == old('role') ? 'selected' : ''}}>{{ $item->name }}</option>
+                                    <label for="nominal">Nominal</label>
+                                    <input type="text" class="form-control @if($errors->has('nominal')) is-invalid @endif" id="nominal"  name="nominal"  placeholder="5.000.000" value="{{ old('nominal') }}" data-toggle="input-mask" data-mask-format="000.000.000.000.000" data-reverse="true" >
+                                    @error('nominal')
+                                        <div class="invalid-feedback" role="feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                @if (!is_cs())
+                                <div class="form-group">
+                                    <label for="operator">Operator</label>
+                                    <select id="operator" name="operator" class="form-control @if($errors->has('operator')) is-invalid @endif"  data-toggle="select2">
+                                        <option value="">Semua Operator</option>
+                                        @foreach ($operators as $item)
+                                            <option value="{{ $item->id }}" {{ $item->id == old('operator') ? 'selected' : ''}}>{{ $item->name }}</option>
                                         @endforeach
                                     </select>
-                                    @error('role')
+                                    @error('operator')
                                         <div class="invalid-feedback" role="feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" class="form-control @if($errors->has('password')) is-invalid @endif" id="password"  name="password"  placeholder="Password" value="{{ old('password') }}">                                    
-                                    @error('password')
-                                        <div class="invalid-feedback" role="feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="confirm_password">Password Confirmation</label>
-                                    <input type="password" class="form-control @if($errors->has('confirm_password')) is-invalid @endif" id="confirm_password"  name="confirm_password"  placeholder="Confirm Password" value="{{ old('confirm_password') }}">
-                                    @error('confirm_password')
-                                        <div class="invalid-feedback" role="feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
+                                @endif
                             </div>
                         </div>
                         <button type="submit" class="btn btn-amdbtn waves-effect waves-light">Simpan</button>
@@ -98,9 +89,20 @@
 @endsection
 @section('script')
 <script src="{{asset('backend/libs/select2/select2.min.js')}}"></script>
+<script src="{{asset('backend/libs/jquery-mask-plugin/jquery-mask-plugin.min.js')}}"></script>
 <script>
     $(document).ready(function(){
         $('select[data-toggle="select2"]').select2();
+        $('[data-toggle="input-mask"]').each(function (idx, obj) {
+            var maskFormat = $(obj).data("maskFormat");
+            var reverse = $(obj).data("reverse");
+            if (reverse != null)
+            {
+                $(obj).mask(maskFormat, {'reverse': reverse});
+            }else{
+                $(obj).mask(maskFormat);
+            }
+        });
     });
 </script>
 @endsection
