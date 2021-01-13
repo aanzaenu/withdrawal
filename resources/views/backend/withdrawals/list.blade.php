@@ -22,6 +22,36 @@
             <div class="col-sm-12">
                 <div class="card-box">
                     <div class="d-block w-100 mb-1">
+                        <div class="table-responsive">
+                            <table class="table mytable table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>Atas Nama Bank</th>
+                                        <th>No. Rekening</th>
+                                        <th>Saldo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($banks as $list)                                        
+                                        <tr>
+                                            <td>{{ $list->name }}</td>
+                                            <td>{{ $list->bankname }}</td>
+                                            <td>{{ $list->rec }}</td>
+                                            <td>Rp. {{ number_format($list->saldo) }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="d-block w-100 mb-1">
                         <div class="row">
                             <div class="col-lg-6">
                                 <form class="exe" method="POST" action="{{ route('admin.'.$uri.'.deletemass') }}">
@@ -137,8 +167,8 @@
                                         </a>
                                     </th>
                                     <th>Bank</th>
-                                    <th class="sorting @if($order_by =='time') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
-                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$bank.$operator.'orderby=time&order='.$urut }}">
+                                    <th class="sorting @if($order_by =='updated_at') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
+                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$bank.$operator.'orderby=updated_at&order='.$urut }}">
                                             Waktu Transfer
                                         </a>
                                     </th>
@@ -182,13 +212,19 @@
                                                     <i class="fe-more-horizontal"></i>
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="{{ route('admin.'.$uri.'.edit', $list->id) }}">Edit</a>
-                                                    <div class="dropdown-divider"></div>                                              
-                                                    <form action="{{ route('admin.'.$uri.'.destroy', $list->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="dropdown-item text-danger">Delete</button>
-                                                    </form>
+                                                    @if (!$list->banks()->first() && $list->status == 0)
+                                                        <a href="#" class="dropdown-item update" data-id="{{ $list->id }}" data-bank="{{ $list->banks()->first() ? $list->banks()->first()->id : '' }}" data-status="{{ $list->status }}">
+                                                            Edit
+                                                        </a>
+                                                    @endif
+                                                    @if (is_admin() || is_subadmin())                                                        
+                                                        <div class="dropdown-divider"></div>                                              
+                                                        <form action="{{ route('admin.'.$uri.'.destroy', $list->id) }}" method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="dropdown-item text-danger">Delete</button>
+                                                        </form>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </td>                                        
@@ -213,6 +249,41 @@
         </div>
     </div>
     @include('backend.layout.ajaxmodal')
+    <div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="updateLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <form class="formupdate" method="POST" action="{{ route('admin.'.$uri.'.apdet') }}">
+                @csrf
+                <input type="hidden" name="id" value="0"/>
+                <div class="modal-header">
+                  <h5 class="modal-title d-block w-100 text-center" id="updateLabel">Modal title</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Withdrawal Bank</label>
+                        <select name="banks" class="custom-select">
+                            <option value="0">Pilih Bank</option>
+                            @foreach ($banks as $item)
+                                <option value="{{ $item->id }}" {{ $item->id == request()->get('bank') ? 'selected' : ''}}>{{ $item->name.' - '.$item->bankname  }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status" class="custom-select">
+                            <option value="0">Belum diproses</option>
+                            <option value="1">Done</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary btn-sm tutup">Close</button>
+                  <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                </div>
+            </form>
+          </div>
+        </div>
+    </div>
 @endsection
 @section('script')
     <script type="application/javascript">
@@ -252,6 +323,23 @@
                 }else{
                     e.preventDefault();
                 }
+            });
+            $('.update').on('click', function(e){
+                e.preventDefault();
+                onModal = true;
+                var id = $(this).data('id');
+                var bank = $(this).data('bank');
+                var status = $(this).data('status');
+                $('#update select[name="status"]').val(status);
+                $('#update select[name="banks"]').val(bank);
+                $('input[name="id"]').val(id);
+                $('#updateLabel').html('#'+ id);
+                $('#update').modal({
+                    backdrop: 'static'
+                });
+            });
+            $('.tutup').on('click', function(){
+                $('#update').modal('hide');
             });
         });
     </script>

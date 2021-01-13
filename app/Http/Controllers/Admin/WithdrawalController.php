@@ -10,6 +10,7 @@ use App\Withdrawal;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+date_default_timezone_set('Asia/Jakarta');
 
 class WithdrawalController extends Controller
 {
@@ -275,6 +276,57 @@ class WithdrawalController extends Controller
         }else{
             $request->session()->flash('error', 'Akses ditolak');
             return redirect()->route('admin.'.$this->uri.'.index');
+        }
+    }
+    public function apdet(Request $request)
+    {
+        if(is_admin() || is_subadmin() || is_wd())
+        {
+            $model = Withdrawal::find($request->id);
+            if($request->banks)
+            {
+                $bank = Bank::where('id', $request->banks)->first();
+                if($bank)
+                {
+                    $saldo = $bank->saldo;
+                    if($saldo < $model->nominal)
+                    {
+                        $request->session()->flash('error', 'Saldo tidak mencukupi');
+                        return redirect()->route('admin.'.$this->uri.'.index');
+                    }
+                }
+            }
+            $model->status = trim($request->status);
+            $model->time = date('Y-m-d H:i:s', time());
+
+            $save = $model->save();
+            if($save)
+            {
+                if($request->banks)
+                {
+                    if($model->banks()->first()){
+                        $model->banks()->sync($request->banks);
+                    }else{
+                        $model->banks()->attach($request->banks);
+                    }
+                    $bank = Bank::where('id', $request->banks)->first();
+                    if($model->status == 1)
+                    {
+                        if($bank)
+                        {
+                            $saldo = $bank->saldo - $model->nominal;
+                            $bank->saldo = $saldo;
+                            $bank->save();
+                        }
+                    }
+                }
+                $request->session()->flash('success', 'Data Updated');
+                return redirect()->route('admin.'.$this->uri.'.index');
+            }
+            $request->session()->flash('error', 'Error Update');
+            return redirect()->route('admin.'.$this->uri.'.index');
+        }else{
+            abort(404);
         }
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\User;
 use App\Bank;
+date_default_timezone_set('Asia/Jakarta');
 
 class BankController extends Controller
 {

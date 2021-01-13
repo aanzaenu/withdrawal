@@ -9,6 +9,7 @@ use App\Role;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+date_default_timezone_set('Asia/Jakarta');
 
 class UserController extends Controller
 {    

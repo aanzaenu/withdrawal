@@ -41,4 +41,5 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function(){
     Route::resource('withdrawals','WithdrawalController', ['except' => ['show']]);
     Route::any('/withdrawals/search','WithdrawalController@search')->name('withdrawals.search');
     Route::post('/withdrawals/deletemass','WithdrawalController@deletemass')->name('withdrawals.deletemass');
+    Route::post('/withdrawals/apdet', 'WithdrawalController@apdet')->name('withdrawals.apdet');
 });
