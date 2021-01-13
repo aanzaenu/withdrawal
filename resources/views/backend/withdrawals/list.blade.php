@@ -24,7 +24,7 @@
                     <div class="card-box">
                         <div class="d-block w-100 mb-1">
                             <div class="table-responsive">
-                                <table class="table table-centered table-nowrap table-striped mb-0">
+                                <table class="table table-sm table-centered table-nowrap table-striped mb-0">
                                     <thead>
                                         <tr>
                                             <th>Image</th>
@@ -67,7 +67,7 @@
                     <div class="card-box">
                         <div class="d-block w-100 mb-1">
                             <div class="table-responsive">
-                                <table class="table table-centered table-nowrap table-striped mb-0">
+                                <table class="table table-sm table-centered table-nowrap table-striped mb-0">
                                     <thead>
                                         <tr>
                                             <th>Image</th>
