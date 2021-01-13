@@ -72,7 +72,7 @@
                     </div>
                     @if(count($lists) > 0)
                     <div class="table-responsive" style="padding-bottom: 155px;">
-                        <table class="table mytable table-hover mb-0">
+                        <table class="table table-centered table-nowrap table-striped mb-0">
                             <thead>
                                 <tr>
                                     <th>

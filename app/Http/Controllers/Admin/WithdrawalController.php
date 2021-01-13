@@ -102,8 +102,8 @@ class WithdrawalController extends Controller
     {
         if(is_admin() || is_subadmin() || is_cs())
         {
-            $data['title'] = "Request ".$this->title." - ".env('APP_NAME', 'Awesome Website');
-            $data['pagetitle'] = "Request ".$this->title;
+            $data['title'] = "Form ".$this->title." - ".env('APP_NAME', 'Awesome Website');
+            $data['pagetitle'] = "Form ".$this->title;
             $data['uri'] = $this->uri;
             $data['operators'] = User::with('roles')->whereHas('roles', function($query){
                                     $query->where('roles.id', 3);

@@ -1,9 +1,9 @@
 @include('backend.layout.head')
-<body  data-layout='{"menuPosition": "fixed"}'>
+<body  data-layout-mode="horizontal">
     <div id="wrapper">
         @include('backend.layout.topbar')
-        @include('backend.layout.left-sidebar')
-        <div class="content-page">
+        @include('backend.layout.horizontal')
+        <div class="content-page pt-0 px-1">
             <div class="content">
                 @yield('content')
             </div>

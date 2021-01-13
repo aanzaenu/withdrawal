@@ -64,7 +64,7 @@
                     </div>
                     @if(count($lists) > 0)
                     <div class="table-responsive" style="padding-bottom: 155px;">
-                        <table class="table mytable table-hover mb-0">
+                        <table class="table table-centered table-nowrap table-striped mb-0">
                             <thead>
                                 <tr>
                                     <th>
@@ -93,6 +93,7 @@
                                             $kueri = 'query='.request()->get('query').'&';
                                         }
                                     ;?>
+                                    <th>Image</th>
                                     <th class="sorting @if($order_by =='name') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
                                         <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$kueri.'orderby=name&order='.$urut }}">
                                             Nama
@@ -125,6 +126,7 @@
                                             <label></label>
                                         </div>
                                     </th>
+                                    <td>{!! $list->image ? '<img src="'.asset($list->image).'" class="img-thumbnail" style="max-width:50px;"/>' : '' !!}</td>
                                     <td>{{ $list->name }}</td>
                                     <td>{{ $list->bankname }}</td>
                                     <td>{{ $list->rec }}</td>

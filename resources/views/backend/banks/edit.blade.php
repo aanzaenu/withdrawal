@@ -18,7 +18,7 @@
             </div>
         </div>
         @include('backend.layout.allert')
-        <form method="POST" action="{{ route('admin.'.$uri.'.update', $row) }}">
+        <form method="POST" action="{{ route('admin.'.$uri.'.update', $row) }}" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card-box">
@@ -62,6 +62,30 @@
                                         </div>
                                     @enderror
                                 </div>
+                                <div class="form-group">
+                                    <label for="file">Image</label>
+                                    <div class="input-group  @if($errors->has('file')) is-invalid @endif">
+                                        <div class="custom-file">
+                                            <input type="file" name="file" class="custom-file-input @if($errors->has('file')) is-invalid @endif" id="inputGroupFile04" accept="image/*">
+                                            <label class="custom-file-label" for="inputGroupFile04">Pilih file</label>
+                                        </div>
+                                    </div>   
+                                    @error('file')
+                                        <div class="invalid-feedback" role="feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                @if ($row->image)                                    
+                                    <div class="form-group">
+                                        <label for="file">Selected Image</label>
+                                        <div class="d-block w-100">
+                                            <a href="{{ asset($row->image) }}" target="_blank">
+                                                <img src="{{ asset($row->image) }}" class="img-thumbnail" style="max-width:200px;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         <button type="submit" class="btn btn-amdbtn waves-effect waves-light">Simpan</button>
@@ -86,6 +110,10 @@
             }else{
                 $(obj).mask(maskFormat);
             }
+        });
+        $(".custom-file-input").on("change", function() {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
         });
     });
 </script>

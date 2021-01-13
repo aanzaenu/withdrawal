@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\User;
 use App\Bank;
+use Illuminate\Support\Facades\File;
 date_default_timezone_set('Asia/Jakarta');
 
 class BankController extends Controller
@@ -85,17 +86,25 @@ class BankController extends Controller
     {
         if(is_admin() || is_subadmin() || is_wd())
         {
+            $requestfile = '';
+            if($request->file)
+            {
+                $requestfile = 'mimes:jpeg,png,jpg,gif,svg,JPEG,PNG,JPG,GIF,SVG|max:2046';
+            }
             $validasi =[
                     'name' => ['required'],
                     'bankname' => ['required'],
                     'rec' => ['required'],
                     'saldo' => ['required'],
+                    'file' => [$requestfile],
                 ];
             $msg = [
                 'name.required' => 'Nama tidak boleh kosong',
                 'bankname.required' => 'Atas Nama Bank tidak boleh kosong',
                 'rec.required' => 'Nomor Rekening Bank tidak boleh kosong',
                 'saldo.required' => 'Saldo Bank tidak boleh kosong',
+                'file.mimes' => 'File tidak didukung',
+                'file.max' => 'Ukuran maksimal 2Mb',
             ];
 
             $request->validate($validasi, $msg);
@@ -103,6 +112,21 @@ class BankController extends Controller
             $bank->bankname = trim($request->bankname);
             $bank->rec = trim($request->rec);
             $bank->saldo = Str::slug(trim($request->saldo), '');
+            if($request->file)
+            {
+                $filed = $request->file;
+                $path = 'assets/images/banks/';
+                $dir = public_path($path);
+                if(!File::isDirectory($dir))
+                {
+                    File::makeDirectory($dir, 0777, true, true);
+                }
+                $file_name = Str::slug($filed->getClientOriginalName(), '-').'-'.time();
+                $name = $file_name.'.'.$filed->getClientOriginalExtension();
+                $filed->move($dir,$name);
+                
+                $bank->image = $path.$name;
+            }
     
             if($bank->save())
             {
@@ -132,17 +156,25 @@ class BankController extends Controller
     {
         if(is_admin() || is_subadmin() || is_wd())
         {
+            $requestfile = '';
+            if($request->file)
+            {
+                $requestfile = 'mimes:jpeg,png,jpg,gif,svg,JPEG,PNG,JPG,GIF,SVG|max:2046';
+            }
             $validasi =[
                     'name' => ['required'],
                     'bankname' => ['required'],
                     'rec' => ['required'],
                     'saldo' => ['required'],
+                    'file' => [$requestfile],
                 ];
             $msg = [
                 'name.required' => 'Nama tidak boleh kosong',
                 'bankname.required' => 'Atas Nama Bank tidak boleh kosong',
                 'rec.required' => 'Nomor Rekening Bank tidak boleh kosong',
                 'saldo.required' => 'Saldo Bank tidak boleh kosong',
+                'file.mimes' => 'File tidak didukung',
+                'file.max' => 'Ukuran maksimal 2Mb',
             ];
             $request->validate($validasi, $msg);
 
@@ -151,7 +183,22 @@ class BankController extends Controller
             $bank->bankname = trim($request->bankname);
             $bank->rec = trim($request->rec);
             $bank->saldo = Str::slug(trim($request->saldo), '');
-    
+            if($request->file)
+            {
+                $filed = $request->file;
+                $path = 'assets/images/banks/';
+                $dir = public_path($path);
+                if(!File::isDirectory($dir))
+                {
+                    File::makeDirectory($dir, 0777, true, true);
+                }
+                $file_name = Str::slug($filed->getClientOriginalName(), '-').'-'.time();
+                $name = $file_name.'.'.$filed->getClientOriginalExtension();
+                $filed->move($dir,$name);
+                
+                $bank->image = $path.$name;
+            }
+            
             if($bank->save())
             {
                 $request->session()->flash('success', 'Sukses update '.$this->title);
@@ -171,6 +218,10 @@ class BankController extends Controller
     {
         if(is_admin() || is_subadmin() || is_wd())
         {
+            if(File::exists(public_path($bank->path)))
+            {
+                File::delete(public_path($bank->path));
+            }
             $bank->delete();
             $request->session()->flash('success', $this->title.' dihapus!');
             return redirect()->route('admin.'.$this->uri.'.index');
@@ -187,6 +238,10 @@ class BankController extends Controller
             $banks = Bank::find($id);
             foreach($banks as $key=> $bank)
             {
+                if(File::exists(public_path($bank->path)))
+                {
+                    File::delete(public_path($bank->path));
+                }
                 $bank->delete();
             }
             $request->session()->flash('success', $this->title.' dihapus!');

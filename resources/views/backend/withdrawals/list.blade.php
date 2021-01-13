@@ -18,36 +18,90 @@
             </div>
         </div>
         @include('backend.layout.allert')
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card-box">
-                    <div class="d-block w-100 mb-1">
-                        <div class="table-responsive">
-                            <table class="table mytable table-hover mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Nama</th>
-                                        <th>Atas Nama Bank</th>
-                                        <th>No. Rekening</th>
-                                        <th>Saldo</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($banks as $list)                                        
+        @if (!is_cs())
+            <div class="row">
+                <div class="col-md-{{ count($banks) > 4 ? '6' : '12' }}">
+                    <div class="card-box">
+                        <div class="d-block w-100 mb-1">
+                            <div class="table-responsive">
+                                <table class="table table-centered table-nowrap table-striped mb-0">
+                                    <thead>
                                         <tr>
-                                            <td>{{ $list->name }}</td>
-                                            <td>{{ $list->bankname }}</td>
-                                            <td>{{ $list->rec }}</td>
-                                            <td>Rp. {{ number_format($list->saldo) }}</td>
+                                            <th>Image</th>
+                                            <th>Nama</th>
+                                            <th>Atas Nama Bank</th>
+                                            <th>No. Rekening</th>
+                                            <th>Saldo</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $ofset = 0;
+                                            $ofset = ceil(count($banks) / 2);
+                                            if(count($banks) - $ofset <= $ofset){
+                                                $ofset = $ofset+1;
+                                            }
+                                        @endphp
+                                        @foreach ($banks as $key=>$list)
+                                        @php
+                                            if ($key + 1 == $ofset && count($banks) > 4) {
+                                                break;
+                                            }
+                                        @endphp
+                                            <tr>
+                                                <td>{!! $list->image ? '<img src="'.asset($list->image).'" class="img-thumbnail" style="max-width:30px;"/>' : '' !!}</td>
+                                                <td>{{ $list->name }}</td>
+                                                <td>{{ $list->bankname }}</td>
+                                                <td>{{ $list->rec }}</td>
+                                                <td>Rp. {{ number_format($list->saldo) }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+                @if (count($banks) > 4)
+                <div class="col-md-6">
+                    <div class="card-box">
+                        <div class="d-block w-100 mb-1">
+                            <div class="table-responsive">
+                                <table class="table table-centered table-nowrap table-striped mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>Nama</th>
+                                            <th>Atas Nama Bank</th>
+                                            <th>No. Rekening</th>
+                                            <th>Saldo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($banks as $key=>$list)
+                                            @php
+                                                if($key+1 < $ofset)
+                                                {
+                                                    continue;
+                                                }
+                                            @endphp
+                                            <tr>
+                                                <td>{!! $list->image ? '<img src="'.asset($list->image).'" class="img-thumbnail" style="max-width:30px;"/>' : '' !!}</td>
+                                                <td>{{ $list->name }}</td>
+                                                <td>{{ $list->bankname }}</td>
+                                                <td>{{ $list->rec }}</td>
+                                                <td>Rp. {{ number_format($list->saldo) }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+                @endif
+            </div>            
+        @endif
         <div class="row">
             <div class="col-sm-12">
                 <div class="card-box">
@@ -60,15 +114,19 @@
                                     <div class="row">
                                         <div class="col-xl-8 mb-3">
                                             <div class="input-group">
-                                                <select name="pilihexe" class="custom-select">
-                                                    <option value="">Pilih Aksi</option>
-                                                    <option value="1">Hapus Terpilih</option>
-                                                </select>
+                                                @if (!is_cs())                                                    
+                                                    <select name="pilihexe" class="custom-select">
+                                                        <option value="">Pilih Aksi</option>
+                                                        <option value="1">Hapus Terpilih</option>
+                                                    </select>
+                                                @endif
                                                 <input type="hidden" name="ids"/>
                                                 <div class="input-group-append">
-                                                    <button class="btn btn-amdbtn waves-effect waves-light" type="submit">Eksekusi</button>
+                                                    @if (!is_cs())
+                                                        <button class="btn btn-amdbtn waves-effect waves-light" type="submit">Eksekusi</button>
+                                                    @endif
                                                     @if (!is_wd())
-                                                        <a href="{{ route('admin.'.$uri.'.create') }}" class="btn btn-dark waves-effect waves-light">Request Witdrawal</a>
+                                                        <a href="{{ route('admin.'.$uri.'.create') }}" class="btn btn-dark waves-effect waves-light">Form Witdrawal</a>
                                                     @endif
                                                 </div>
                                             </div>
@@ -110,7 +168,7 @@
                     </div>
                     @if(count($lists) > 0)
                     <div class="table-responsive" style="padding-bottom: 155px;">
-                        <table class="table mytable table-hover mb-0">
+                        <table class="table table-centered table-nowrap table-striped mb-0">
                             <thead>
                                 <tr>
                                     @if (!is_cs())

@@ -1,5 +1,5 @@
 <!-- Topbar Start -->
-<div class="navbar-custom">
+<div class="navbar-custom d-block d-lg-none">
     <div class="container-fluid">
         <ul class="list-unstyled topnav-menu float-right mb-0">    
             <li class="dropdown d-none d-lg-inline-block">

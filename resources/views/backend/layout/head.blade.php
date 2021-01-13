@@ -15,4 +15,9 @@
     <link href="{{asset('backend/css/custom.css')}} " rel="stylesheet" type="text/css"/>
     @yield('css')
     <link href="{{asset('backend/css/app.min.css')}} " rel="stylesheet" type="text/css" id="app-default-stylesheet" />
+    <style>
+        .container-fluid{
+            max-width: 100%!important;
+        }
+    </style>
 </head>
