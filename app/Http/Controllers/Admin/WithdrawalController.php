@@ -248,6 +248,10 @@ class WithdrawalController extends Controller
             {
                 $withdrawal->banks()->detach();
             }
+            if(File::exists(public_path($withdrawal->image)))
+            {
+                File::delete(public_path($withdrawal->image));
+            }
 
             $withdrawal->delete();
             $request->session()->flash('success', $this->title.' dihapus!');
@@ -270,6 +274,10 @@ class WithdrawalController extends Controller
                 if($number)
                 {
                     $withdrawal->banks()->detach();
+                }
+                if(File::exists(public_path($withdrawal->image)))
+                {
+                    File::delete(public_path($withdrawal->image));
                 }
 
                 $withdrawal->delete();
