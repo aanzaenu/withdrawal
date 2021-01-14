@@ -10,6 +10,7 @@ use App\Withdrawal;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
 date_default_timezone_set('Asia/Jakarta');
 
 class WithdrawalController extends Controller
@@ -298,8 +299,28 @@ class WithdrawalController extends Controller
                     }
                 }
             }
+            if($request->fee)
+            {
+                $model->fee = Str::slug(trim($request->fee), '');
+            }
             $model->status = trim($request->status);
             $model->time = date('Y-m-d H:i:s', time());
+
+            if($request->file)
+            {
+                $filed = $request->file;
+                $path = 'assets/images/withdrawals/'.$model->id.'/';
+                $dir = public_path($path);
+                if(!File::isDirectory($dir))
+                {
+                    File::makeDirectory($dir, 0777, true, true);
+                }
+                $file_name = Str::slug($filed->getClientOriginalName(), '-').'-'.time();
+                $name = $file_name.'.'.$filed->getClientOriginalExtension();
+                $filed->move($dir,$name);
+                
+                $model->image = $path.$name;
+            }
 
             $save = $model->save();
             if($save)

@@ -75,6 +75,7 @@ class WithdrawalExport implements FromCollection, WithHeadings, WithMapping, Wit
             $lists[$key]->nominal = 'Rp. '.number_format($val->nominal);
             $lists[$key]->wdbank = $val->banks()->first() ? $val->banks()->first()->name : '-';
             $lists[$key]->tanggal = $val->time ? date('d, M Y H:i', strtotime($val->time)) : '-';
+            $lists[$key]->biayaadmin = 'Rp. '.number_format($val->fee);
             
         }
         return $lists;
@@ -87,8 +88,9 @@ class WithdrawalExport implements FromCollection, WithHeadings, WithMapping, Wit
             $user->namerec,
             $user->nominal,
             $user->wdbank,
-            $user->status,
+            $user->biayaadmin,
             $user->tanggal,
+            $user->status,
         ];
     }
     public function headings(): array
@@ -100,6 +102,7 @@ class WithdrawalExport implements FromCollection, WithHeadings, WithMapping, Wit
             'Nama dan Rec',
             'Nominal',
             'Bank',
+            'Biaya Admin',
             'Waktu Transfer',
             'Status'
         ];
@@ -108,12 +111,13 @@ class WithdrawalExport implements FromCollection, WithHeadings, WithMapping, Wit
     {
         return [
             'A' => 5,
-            'B' => 15,
-            'C' => 20,
-            'D' => 80,
+            'B' => 20,
+            'C' => 80,
+            'D' => 20,
             'E' => 20,
             'F' => 20,
             'G' => 30,
+            'H' => 30,
         ];
     }
 }

@@ -67,10 +67,12 @@
                                         Nominal
                                     </th>
                                     <th>Bank</th>
+                                    <th>Biaya Admin</th>
                                     <th>
                                         Waktu Transfer
                                     </th>
                                     <th>Status</th>
+                                    <th>Bukti Transfer</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -86,6 +88,7 @@
                                     <td>{!! $list->bank.' - '.$list->bankname.'<br/>'.$list->bankrec !!}</td>
                                     <td>Rp. {{ number_format($list->nominal) }}</td>
                                     <td>{{ $list->banks()->first() ? $list->banks()->first()->name : '-' }}</td>
+                                    <td>Rp. {{ number_format($list->fee) }}</td>
                                     <td>{{ $list->time ? date('d, M Y H:i', strtotime($list->time)) : '-' }}</td>
                                     <td>
                                         @if ($list->status == 0)
@@ -97,6 +100,9 @@
                                             Done
                                         </span>
                                         @endif
+                                    </td>
+                                    <td>
+                                        {{ $list->image ? '<a class="btn btn-sm btn-amdbtn" href="'.asset($list->image).'" target="_blank">Image</a>' : '-' }}
                                     </td>
                                 </tr>
                                 @endforeach

@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="saldo">Saldo</label>
-                                    <input type="text" class="form-control @if($errors->has('saldo')) is-invalid @endif" id="saldo"  name="saldo"  placeholder="5.000.000" value="{{ old('saldo') }}" data-toggle="input-mask" data-mask-format="000.000.000.000.000" data-reverse="true" >
+                                    <input type="text" class="form-control @if($errors->has('saldo')) is-invalid @endif" id="saldo"  name="saldo"  value="0" placeholder="5.000.000" value="{{ old('saldo') }}" data-toggle="input-mask" data-mask-format="000.000.000.000.000" data-reverse="true" >
                                     @error('saldo')
                                         <div class="invalid-feedback" role="feedback">
                                             {{ $message }}
