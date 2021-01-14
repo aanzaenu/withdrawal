@@ -21,5 +21,18 @@
         .container-fluid{
             max-width: 100%!important;
         }
+        .topnav .navbar-nav .nav-item:first-of-type .nav-link{
+            padding: calc(33px / 2) 1.1rem;
+        }
+        .topnav .navbar-nav .nav-link:focus, .topnav .navbar-nav .nav-link:hover{
+            background-color: #437512;
+            opacity: .5;
+        }
+        .topnav .navbar-nav .nav-link{
+            border-right: 1px solid #FFFFFF;
+        }
+        .navbar-light .navbar-nav .active > .nav-link, .navbar-light .navbar-nav .nav-link.active{
+            background-color: #323a46!important;
+        }
     </style>
 </head>
