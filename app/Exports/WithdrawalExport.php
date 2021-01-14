@@ -2,32 +2,41 @@
 
 namespace App\Exports;
 
-use App\Inbox;
-use App\User;
-use App\Terminal;
+use App\Withdrawal;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class InboxExport implements FromCollection, WithHeadings, WithMapping, WithColumnWidths
+class WithdrawalExport implements FromCollection, WithHeadings, WithMapping, WithColumnWidths
 {
-    function __construct($op, $from, $to, $terminal) {
-        $this->op = $op;
+    function __construct($from, $to, $operator, $banks, $status) {
         $this->from = $from;
         $this->to = $to;
-        $this->terminal = $terminal;
+        $this->operator = $operator;
+        $this->banks = $banks;
+        $this->status = $status;
     }
     public function collection()
     {
-        $model = Inbox::whereNotNull('code');
-        if(!empty($this->op))
+        $model = Withdrawal::with('banks');
+        if(!empty($this->operator))
         {
-            $model->where('op', $this->op);
+            $model->where('operator', $this->operator);
+        }        
+        if($this->banks)
+        {
+            $rol = $this->banks;
+            $model->whereHas('banks', function($query) use ($rol){
+                $query->where('banks.id', $rol);
+            });
         }
-        if(!empty($this->terminal))
+        if(!empty($this->status) || $this->status == 0)
         {
-            $model->where('terminal', $this->terminal);
+            if($this->status !== 'all')
+            {
+                $model->where('status', $this->status);
+            }
         }
         if(!empty($this->from) && !empty($this->to))
         {
@@ -38,10 +47,10 @@ class InboxExport implements FromCollection, WithHeadings, WithMapping, WithColu
             $sfrom = date('Y-m-d H:i:s', $d_from);
             $sto = date('Y-m-d H:i:s', $d_to);
 
-            $model->where('tanggal', '>=', $sfrom);
-            $model->where('tanggal', '<=', $sto);
+            $model->where('time', '>=', $sfrom);
+            $model->where('time', '<=', $sto);
         }
-        $model->orderBy('code', 'DESC');
+        $model->orderBy('id', 'DESC');
 
         $lists = $model->get();
         foreach($lists as $key=> $val)
@@ -54,20 +63,18 @@ class InboxExport implements FromCollection, WithHeadings, WithMapping, WithColu
             }else{
                 $lists[$key]->status = 'Done';
             }
-            if(User::find($val->op))
+            if($val->op)
             {
-                $lists[$key]->op = User::find($val->op)->name;
+                $lists[$key]->operator = $val->op->name;
             }else{
-                $lists[$key]->op = '-';
+                $lists[$key]->operator = '-';
             }
             $lists[$key]->created_at = '';
             $lists[$key]->updated_at = '';
-            if(Terminal::where('terminal_id', $val->terminal)->first())
-            {
-                $lists[$key]->terminal = Terminal::where('terminal_id', $val->terminal)->first()->name;
-            }else{
-                $lists[$key]->terminal = '-';
-            }
+            $lists[$key]->namerec = $val->bank.' A.N '.$val->bankname.' - '.$val->bankrec;
+            $lists[$key]->nominal = 'Rp. '.number_format($val->nominal);
+            $lists[$key]->wdbank = $val->banks()->first() ? $val->banks()->first()->name : '-';
+            $lists[$key]->tanggal = $val->time ? date('d, M Y H:i', strtotime($val->time)) : '-';
             
         }
         return $lists;
@@ -76,12 +83,11 @@ class InboxExport implements FromCollection, WithHeadings, WithMapping, WithColu
     {
         return [
             $user->nomer,
-            $user->code,
-            $user->sender,
-            $user->message,
-            $user->op,
+            $user->operator,
+            $user->namerec,
+            $user->nominal,
+            $user->wdbank,
             $user->status,
-            $user->terminal,
             $user->tanggal,
         ];
     }
@@ -90,13 +96,12 @@ class InboxExport implements FromCollection, WithHeadings, WithMapping, WithColu
 
         return [
             '#',
-            'Kode',
-            'Pengirim',
-            'Pesan',
             'Operator',
-            'Status',
-            'Terminal',
-            'Tanggal'
+            'Nama dan Rec',
+            'Nominal',
+            'Bank',
+            'Waktu Transfer',
+            'Status'
         ];
     }
     public function columnWidths(): array
@@ -108,7 +113,6 @@ class InboxExport implements FromCollection, WithHeadings, WithMapping, WithColu
             'D' => 80,
             'E' => 20,
             'F' => 20,
-            'G' => 20,
             'G' => 30,
         ];
     }

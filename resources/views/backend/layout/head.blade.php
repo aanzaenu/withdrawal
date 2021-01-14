@@ -13,6 +13,8 @@
     <link href="{{asset('backend/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('backend/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" id="bs-default-stylesheet" />
     <link href="{{asset('backend/css/custom.css')}} " rel="stylesheet" type="text/css"/>
+    <link href="{{asset('backend/libs/select2/select2.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('backend/libs/animate.css/animate.css.min.css')}}" rel="stylesheet" type="text/css" />
     @yield('css')
     <link href="{{asset('backend/css/app.min.css')}} " rel="stylesheet" type="text/css" id="app-default-stylesheet" />
     <style>

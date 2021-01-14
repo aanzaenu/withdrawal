@@ -26,6 +26,16 @@
                                 </a>
                             </li>                            
                         @endif
+                        <li class="nav-item">
+                            <a class="nav-link btn-suntikdana" href="#">
+                                <i class="fe-plus-circle mr-1"></i> Suntik Dana
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.reports.index') }}">
+                                <i class="fe-book mr-1"></i> Laporan
+                            </a>
+                        </li>
                     @endif
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('admin.users.profile')}}">

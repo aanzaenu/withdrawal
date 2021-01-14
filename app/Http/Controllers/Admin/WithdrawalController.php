@@ -108,6 +108,7 @@ class WithdrawalController extends Controller
             $data['operators'] = User::with('roles')->whereHas('roles', function($query){
                                     $query->where('roles.id', 3);
                                 })->orderBy('name', 'ASC')->get();
+            $data['banks'] = Bank::orderBy('name', 'ASC')->get();
             return view('backend.'.$this->uri.'.create', $data);
         }else{
             abort(404);
@@ -175,6 +176,7 @@ class WithdrawalController extends Controller
             }else{
                 $data['operators'] = User::where('id', $withdrawal->operator)->get();
             }
+            $data['banks'] = Bank::orderBy('name', 'ASC')->get();
             return view('backend.'.$this->uri.'.edit', $data);
         }else{
             abort(404);

@@ -26,6 +26,7 @@ class BankController extends Controller
             $data['pagetitle'] = $this->title;
             $data['uri'] = $this->uri;
             $data['lists'] = Bank::orderBy('name', 'ASC')->paginate(20);
+            $data['banks'] = Bank::orderBy('name', 'ASC')->get();
             return view('backend.'.$this->uri.'.list', $data);
         }else{
             abort(404);
@@ -62,6 +63,7 @@ class BankController extends Controller
                 $data['pagetitle'] = "Pencarian ".$this->title;
                 $data['uri'] = $this->uri;
                 $data['lists'] = $model->paginate(20);
+                $data['banks'] = Bank::orderBy('name', 'ASC')->get();
                 return view('backend.'.$this->uri.'.list', $data);
             }else{
                 return redirect()->route('admin.'.$this->uri.'.index');
@@ -77,6 +79,7 @@ class BankController extends Controller
             $data['title'] = "Tambah ".$this->title." - ".env('APP_NAME', 'Awesome Website');
             $data['pagetitle'] = "Tambah ".$this->title;
             $data['uri'] = $this->uri;
+            $data['banks'] = Bank::orderBy('name', 'ASC')->get();
             return view('backend.'.$this->uri.'.create', $data);
         }else{
             abort(404);
@@ -147,6 +150,7 @@ class BankController extends Controller
             $data['title'] = "Edit ".$this->title." - ".env('APP_NAME', 'Awesome Website');
             $data['pagetitle'] = "Edit ".$this->title;
             $data['uri'] = $this->uri;
+            $data['banks'] = Bank::orderBy('name', 'ASC')->get();
             return view('backend.'.$this->uri.'.edit', $data);
         }else{
             abort(404);
@@ -177,8 +181,7 @@ class BankController extends Controller
                 'file.max' => 'Ukuran maksimal 2Mb',
             ];
             $request->validate($validasi, $msg);
-
-            $request->validate($validasi, $msg);
+            
             $bank->name = trim($request->name);
             $bank->bankname = trim($request->bankname);
             $bank->rec = trim($request->rec);
@@ -246,6 +249,39 @@ class BankController extends Controller
             }
             $request->session()->flash('success', $this->title.' dihapus!');
             return redirect()->route('admin.'.$this->uri.'.index');
+        }else{
+            abort(404);
+        }
+    }
+    public function suntikdana(Request $request)
+    {
+        
+        if(is_admin() || is_subadmin() || is_wd())
+        {         
+            $bank = Bank::find($request->banks);
+            if(!$bank)
+            {
+                $request->session()->flash('error', 'Not Found!');
+                return redirect()->back();
+            }
+            
+            $validasi =[
+                'saldo' => ['required'],
+                ];
+            $msg = [
+                'saldo.required' => 'Saldo Bank tidak boleh kosong',
+            ];
+            $request->validate($validasi, $msg);
+            $saldo = Str::slug(trim($request->saldo), '');
+            $bank->saldo = $bank->saldo + intval($saldo);
+            if($bank->save())
+            {
+                $request->session()->flash('success', 'Sukses update '.$this->title);
+
+            }else{
+                $request->session()->flash('error', 'Error!');
+            }
+            return redirect()->back();
         }else{
             abort(404);
         }

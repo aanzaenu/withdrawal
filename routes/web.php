@@ -37,9 +37,14 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function(){
     Route::resource('banks','BankController', ['except' => ['show']]);
     Route::any('/banks/search','BankController@search')->name('banks.search');
     Route::post('/banks/deletemass','BankController@deletemass')->name('banks.deletemass');
+    Route::post('/banks/suntikdana','BankController@suntikdana')->name('banks.suntikdana');
         
     Route::resource('withdrawals','WithdrawalController', ['except' => ['show']]);
     Route::any('/withdrawals/search','WithdrawalController@search')->name('withdrawals.search');
     Route::post('/withdrawals/deletemass','WithdrawalController@deletemass')->name('withdrawals.deletemass');
     Route::post('/withdrawals/apdet', 'WithdrawalController@apdet')->name('withdrawals.apdet');
+    
+    Route::get('/reports', 'ReportController@index')->name('reports.index');
+    Route::any('/reports/search','ReportController@search')->name('reports.search');
+    Route::post('/reports/download', 'ReportController@download')->name('reports.download');
 });

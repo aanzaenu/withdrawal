@@ -1,6 +1,5 @@
 @extends('backend.layout.app')
 @section('css')
-    <link href="{{asset('backend/libs/select2/select2.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('backend/libs/flatpickr/flatpickr.min.css')}}" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
@@ -125,22 +124,9 @@
     </div>
 @endsection
 @section('script')
-<script src="{{asset('backend/libs/select2/select2.min.js')}}"></script>
-<script src="{{asset('backend/libs/jquery-mask-plugin/jquery-mask-plugin.min.js')}}"></script>
 <script src="{{asset('backend/libs/flatpickr/flatpickr.min.js')}}"></script>
 <script>
     $(document).ready(function(){
-        $('select[data-toggle="select2"]').select2();
-        $('[data-toggle="input-mask"]').each(function (idx, obj) {
-            var maskFormat = $(obj).data("maskFormat");
-            var reverse = $(obj).data("reverse");
-            if (reverse != null)
-            {
-                $(obj).mask(maskFormat, {'reverse': reverse});
-            }else{
-                $(obj).mask(maskFormat);
-            }
-        });
         $('[data-toggle="input-flat"]').flatpickr({
             enableTime: true,
             dateFormat: "Y-m-d H:i"

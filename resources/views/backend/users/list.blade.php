@@ -1,6 +1,5 @@
 @extends('backend.layout.app')
 @section('css')
-    <link href="{{asset('backend/libs/animate.css/animate.css.min.css')}}" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
     <div class="container-fluid">

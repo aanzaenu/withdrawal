@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\User;
+use App\Bank;
 
 class DashboardController extends Controller
 {
@@ -19,6 +19,7 @@ class DashboardController extends Controller
         {
             $data['title'] = $this->title." - ".env('APP_NAME', 'Awesome Website');
             $data['pagetitle'] = $this->title;
+            $data['banks'] = Bank::orderBy('name', 'ASC')->get();
             return view('backend.'.$this->uri, $data);
         }else{
             abort(404);

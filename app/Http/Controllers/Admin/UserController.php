@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
 use App\Role;
+use App\Bank;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -38,6 +39,7 @@ class UserController extends Controller
                 })->where('owner', Auth::user()->id)->orderBy('id', 'DESC')->paginate(20);
                 $data['roles'] = Role::where('id', 3)->orderBy('name', 'ASC')->get();
             }
+            $data['banks'] = Bank::orderBy('name', 'ASC')->get();
             return view('backend.'.$this->uri.'.list', $data);
         }else{
             abort(404);
@@ -97,6 +99,7 @@ class UserController extends Controller
                     $data['roles'] = Role::where('id', 3)->orderBy('name', 'ASC')->get();
                     $data['lists'] = $model->where('owner', Auth::user()->id)->paginate(20);
                 }
+                $data['banks'] = Bank::orderBy('name', 'ASC')->get();
                 return view('backend.'.$this->uri.'.list', $data);
             }else{
                 return redirect()->route('admin.'.$this->uri.'.index');
@@ -117,6 +120,7 @@ class UserController extends Controller
             }else{
                 $data['roles'] = Role::where('id', 3)->orderBy('name', 'ASC')->get();
             }
+            $data['banks'] = Bank::orderBy('name', 'ASC')->get();
             return view('backend.'.$this->uri.'.create', $data);
         }else{
             abort(404);
@@ -182,6 +186,7 @@ class UserController extends Controller
             }else{
                 $data['roles'] = Role::where('id', 3)->orderBy('name', 'ASC')->get();
             }
+            $data['banks'] = Bank::orderBy('name', 'ASC')->get();
             return view('backend.'.$this->uri.'.edit', $data);
         }else{
             abort(404);
@@ -217,7 +222,10 @@ class UserController extends Controller
     
             if($user->save())
             {
-                $user->roles()->sync($request->role);
+                if(Auth::user()->id !== 1)
+                {
+                    $user->roles()->sync($request->role);
+                }
                 $request->session()->flash('success', 'Sukses update '.$this->title);
                 if(is_cs() || is_wd())
                 {
@@ -244,6 +252,7 @@ class UserController extends Controller
             }else{
                 $data['roles'] = Role::whereIn('id', [3, 4])->orderBy('name', 'ASC')->get();
             }
+            $data['banks'] = Bank::orderBy('name', 'ASC')->get();
             return view('backend.'.$this->uri.'.edit', $data);
         }else{
             abort(404);
