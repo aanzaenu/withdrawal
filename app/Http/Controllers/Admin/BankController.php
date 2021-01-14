@@ -221,9 +221,12 @@ class BankController extends Controller
     {
         if(is_admin() || is_subadmin() || is_wd())
         {
-            if(File::exists(public_path($bank->path)))
+            if($bank->path)
             {
-                File::delete(public_path($bank->path));
+                if(File::exists(public_path($bank->path)))
+                {
+                    File::delete(public_path($bank->path));
+                }
             }
             $bank->delete();
             $request->session()->flash('success', $this->title.' dihapus!');
@@ -241,9 +244,12 @@ class BankController extends Controller
             $banks = Bank::find($id);
             foreach($banks as $key=> $bank)
             {
-                if(File::exists(public_path($bank->path)))
+                if($bank->path)
                 {
-                    File::delete(public_path($bank->path));
+                    if(File::exists(public_path($bank->path)))
+                    {
+                        File::delete(public_path($bank->path));
+                    }
                 }
                 $bank->delete();
             }

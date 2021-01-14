@@ -248,9 +248,12 @@ class WithdrawalController extends Controller
             {
                 $withdrawal->banks()->detach();
             }
-            if(File::exists(public_path($withdrawal->image)))
+            if($withdrawal->image)
             {
-                File::delete(public_path($withdrawal->image));
+                if(File::exists(public_path($withdrawal->image)))
+                {
+                    File::delete(public_path($withdrawal->image));
+                }
             }
 
             $withdrawal->delete();
@@ -275,9 +278,12 @@ class WithdrawalController extends Controller
                 {
                     $withdrawal->banks()->detach();
                 }
-                if(File::exists(public_path($withdrawal->image)))
+                if($withdrawal->image)
                 {
-                    File::delete(public_path($withdrawal->image));
+                    if(File::exists(public_path($withdrawal->image)))
+                    {
+                        File::delete(public_path($withdrawal->image));
+                    }
                 }
 
                 $withdrawal->delete();
