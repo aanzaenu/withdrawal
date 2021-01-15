@@ -288,7 +288,7 @@
                                     </td>
                                     @if (!is_cs())
                                         <td >
-                                            @if (!$list->banks()->first() && $list->status == 0)
+                                            @if ($list->status == 0)
                                                 <a href="#" class="btn btn-amdbtn btn-sm update" data-id="{{ $list->id }}" data-bank="{{ $list->banks()->first() ? $list->banks()->first()->id : '' }}" data-status="{{ $list->status }}">
                                                     Edit
                                                 </a>
