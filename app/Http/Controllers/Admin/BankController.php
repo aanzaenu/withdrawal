@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\User;
 use App\Bank;
+use App\Amount;
 use Illuminate\Support\Facades\File;
 date_default_timezone_set('Asia/Jakarta');
 
@@ -20,7 +21,7 @@ class BankController extends Controller
     }
     public function index()
     {
-        if(is_admin() || is_subadmin() || is_wd())
+        if(is_admin() || is_subadmin())
         {
             $data['title'] = $this->title." - ".env('APP_NAME', 'Awesome Website');
             $data['pagetitle'] = $this->title;
@@ -34,7 +35,7 @@ class BankController extends Controller
     }
     public function search(Request $request)
     {
-        if(is_admin() || is_subadmin() || is_wd())
+        if(is_admin() || is_subadmin())
         {
             if(!empty($request->get('query')) || !empty($request->get('orderby')))
             {
@@ -74,7 +75,7 @@ class BankController extends Controller
     }
     public function create()
     {
-        if(is_admin() || is_subadmin() || is_wd())
+        if(is_admin() || is_subadmin())
         {
             $data['title'] = "Tambah ".$this->title." - ".env('APP_NAME', 'Awesome Website');
             $data['pagetitle'] = "Tambah ".$this->title;
@@ -87,7 +88,7 @@ class BankController extends Controller
     }
     public function store(Request $request, Bank $bank)
     {
-        if(is_admin() || is_subadmin() || is_wd())
+        if(is_admin() || is_subadmin())
         {
             $requestfile = '';
             if($request->file)
@@ -144,7 +145,7 @@ class BankController extends Controller
     }
     public function edit(Bank $bank)
     {
-        if(is_admin() || is_subadmin() || is_wd())
+        if(is_admin() || is_subadmin())
         {
             $data['row'] = $bank;
             $data['title'] = "Edit ".$this->title." - ".env('APP_NAME', 'Awesome Website');
@@ -158,7 +159,7 @@ class BankController extends Controller
     }
     public function update(Request $request, Bank $bank)
     {
-        if(is_admin() || is_subadmin() || is_wd())
+        if(is_admin() || is_subadmin())
         {
             $requestfile = '';
             if($request->file)
@@ -219,7 +220,7 @@ class BankController extends Controller
     }
     public function destroy(Request $request, Bank $bank)
     {
-        if(is_admin() || is_subadmin() || is_wd())
+        if(is_admin() || is_subadmin())
         {
             if($bank->path)
             {
@@ -238,7 +239,7 @@ class BankController extends Controller
     public function deletemass(Request $request)
     {
         
-        if(is_admin() || is_subadmin() || is_wd())
+        if(is_admin() || is_subadmin())
         {
             $id = explode(",", $request->ids);            
             $banks = Bank::find($id);
@@ -262,7 +263,37 @@ class BankController extends Controller
     public function suntikdana(Request $request)
     {
         
-        if(is_admin() || is_subadmin() || is_wd())
+        if(is_admin() || is_subadmin() ||  is_wd())
+        {
+            $validasi =[
+                'banks' => ['required'],
+                'saldo' => ['required'],
+                ];
+            $msg = [
+                'banks.required' => 'Bank tidak boleh kosong',
+                'saldo.required' => 'Saldo Bank tidak boleh kosong',
+            ];
+            $request->validate($validasi, $msg);
+            $model = Amount::create([
+                'bank_id' => $request->banks,
+                'nominal' => Str::slug(trim($request->saldo), ''),
+                'user_id' => Auth::user()->id
+            ]);
+            if($model)
+            {
+                $request->session()->flash('success', 'Permintaan Suntik Dana terkirim.');
+            }else{
+                $request->session()->flash('error', 'Error saat memproses data');
+            }
+            return redirect()->back();
+        }else{
+            abort(404);
+        }
+    }
+    public function suntikdanabak(Request $request)
+    {
+        
+        if(is_admin() || is_subadmin())
         {         
             $bank = Bank::find($request->banks);
             if(!$bank)

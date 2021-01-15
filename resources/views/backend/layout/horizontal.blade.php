@@ -14,12 +14,12 @@
                         </a>
                     </li>
                     @if (is_admin() || is_subadmin() || is_wd())
-                        <li class="nav-item">
-                            <a class="nav-link bg-amdbtn text-white" href="{{route('admin.banks.index')}}">
-                                <i class="fe-dollar-sign mr-1"></i> Banks
-                            </a>
-                        </li>
                         @if (is_admin() || is_subadmin())
+                            <li class="nav-item">
+                                <a class="nav-link bg-amdbtn text-white" href="{{route('admin.banks.index')}}">
+                                    <i class="fe-dollar-sign mr-1"></i> Banks
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link bg-amdbtn text-white" href="{{route('admin.users.index')}}">
                                     <i class="fe-users mr-1"></i> Users
@@ -27,9 +27,15 @@
                             </li>                            
                         @endif
                         <li class="nav-item">
-                            <a class="nav-link bg-amdbtn text-white btn-suntikdana" href="#">
-                                <i class="fe-plus-circle mr-1"></i> Suntik Dana
-                            </a>
+                            @if (is_wd())
+                                <a class="nav-link bg-amdbtn text-white btn-suntikdana" href="#">
+                                    <i class="fe-plus-circle mr-1"></i> Suntik Dana
+                                </a>
+                            @else
+                                <a class="nav-link bg-amdbtn text-white" href="{{ route('admin.amounts.index') }}">
+                                    <i class="fe-plus-circle mr-1"></i> Suntik Dana
+                                </a>                                
+                            @endif
                         </li>
                         <li class="nav-item">
                             <a class="nav-link bg-amdbtn text-white" href="{{ route('admin.reports.index') }}">

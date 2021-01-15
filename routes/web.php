@@ -47,4 +47,9 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function(){
     Route::get('/reports', 'ReportController@index')->name('reports.index');
     Route::any('/reports/search','ReportController@search')->name('reports.search');
     Route::post('/reports/download', 'ReportController@download')->name('reports.download');
+
+    Route::resource('amounts','AmountController', ['except' => ['show', 'edit', 'update', 'store', 'add']]);
+    Route::any('/amounts/search','AmountController@search')->name('amounts.search');
+    Route::post('/amounts/deletemass','AmountController@deletemass')->name('amounts.deletemass');
+    Route::post('/amounts/apdet', 'AmountController@apdet')->name('amounts.apdet');
 });

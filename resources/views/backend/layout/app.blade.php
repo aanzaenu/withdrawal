@@ -26,7 +26,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="saldo">Saldo</label>
+                                <label for="saldo">Nominal</label>
                                 <input type="text" class="form-control" id="saldo"  name="saldo"  placeholder="5.000.000" data-toggle="input-mask" data-mask-format="000.000.000.000.000" data-reverse="true" >
                             </div>
                         </div>
