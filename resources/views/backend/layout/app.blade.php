@@ -81,7 +81,7 @@
                 console.log(respon);
                 sound.play();
                 $.toast({
-                    text : '<a class="alert-link border-0" href="'+link+'">Permintaan Suntik Dana baru dari'+data.name+'</a>',
+                    text : '<a class="alert-link border-0" href="'+link+'">Permintaan Suntik Dana baru dari '+data.name+'</a>',
                     position: 'top-right',
                     loaderBg: '#437512;',
                     icon: 'info',
