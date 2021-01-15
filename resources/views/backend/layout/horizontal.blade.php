@@ -51,6 +51,21 @@
                         </form>
                     </li>
                 </ul> <!-- end navbar-->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link bg-amdbtn text-white" href="{{route('admin.users.profile')}}">
+                            @if (is_admin())
+                                TEAM ADMIN                            
+                            @endif
+                            @if (is_cs())
+                                TEAM CS                            
+                            @endif
+                            @if (is_wd())
+                                TEAM WITHDRAW                            
+                            @endif
+                        </a>
+                    </li>
+                </ul>
             </div> <!-- end .collapsed-->
         </nav>
     </div> <!-- end container-fluid -->

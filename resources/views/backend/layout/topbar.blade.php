@@ -49,16 +49,16 @@
         <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
             <li>
                 <button class="button-menu-mobile waves-effect waves-light">
-                    <i class="fe-menu"></i>
+                    <i class="fe-menu "></i>
                 </button>
             </li>
 
             <li>
                 <a class="navbar-toggle nav-link" data-toggle="collapse" data-target="#topnav-menu-content">
                     <div class="lines">
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                        <span class="bg-white"></span>
+                        <span class="bg-white"></span>
+                        <span class="bg-white"></span>
                     </div>
                 </a>
             </li>               

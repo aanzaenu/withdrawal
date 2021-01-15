@@ -17,6 +17,20 @@
             </div>
         </div>
         @include('backend.layout.allert')
+        @if (!is_admin())
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-block w-100">
+                        @if (is_cs())
+                            <marquee class="h4 font-weight-bold text-uppercase">harap masukkan nama, nomor rekening, dan nominal nya dengan benar.</marquee>                            
+                        @endif
+                        @if (is_wd())
+                            <marquee class="h4 font-weight-bold text-uppercase">harap cocokin saldo bank setiap selesai wd, jika tidak cocok berarti ada selisih.</marquee>                            
+                        @endif
+                    </div>
+                </div>
+            </div>
+        @endif
         @if (!is_cs())
             <div class="row">
                 <div class="col-md-{{ count($banks) > 4 ? '6' : '12' }}">

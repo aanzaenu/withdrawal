@@ -105,7 +105,8 @@
 <script>
     $(document).ready(function(){
         $('[data-toggle="input-flat"]').flatpickr({
-            dateFormat: "Y-m-d"
+            enableTime: true,
+            dateFormat: "Y-m-d H:i"
         });
     });
 </script>

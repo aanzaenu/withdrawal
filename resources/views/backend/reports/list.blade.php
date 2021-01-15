@@ -102,7 +102,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        {{ $list->image ? '<a class="btn btn-sm btn-amdbtn" href="'.asset($list->image).'" target="_blank">Image</a>' : '-' }}
+                                        {!! $list->image ? '<a class="btn btn-sm btn-amdbtn" href="'.asset($list->image).'" target="_blank">Image</a>' : '-' !!}
                                     </td>
                                 </tr>
                                 @endforeach
