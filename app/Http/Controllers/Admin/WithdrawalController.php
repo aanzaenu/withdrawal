@@ -300,13 +300,15 @@ class WithdrawalController extends Controller
         if(is_admin() || is_subadmin() || is_wd())
         {
             $model = Withdrawal::find($request->id);
+            $fee = intval(Str::slug(trim($request->fee), ''));
             if($request->banks)
             {
+                $model->status = 1;
                 $bank = Bank::where('id', $request->banks)->first();
                 if($bank)
                 {
                     $saldo = $bank->saldo;
-                    if($saldo < $model->nominal)
+                    if($saldo < ($model->nominal + $fee))
                     {
                         $request->session()->flash('error', 'Saldo tidak mencukupi');
                         return redirect()->route('admin.'.$this->uri.'.index');
@@ -315,9 +317,8 @@ class WithdrawalController extends Controller
             }
             if($request->fee)
             {
-                $model->fee = Str::slug(trim($request->fee), '');
+                $model->fee = $fee;
             }
-            $model->status = trim($request->status);
             $model->time = date('Y-m-d H:i:s', time());
 
             if($request->file)
@@ -351,7 +352,7 @@ class WithdrawalController extends Controller
                     {
                         if($bank)
                         {
-                            $saldo = $bank->saldo - $model->nominal;
+                            $saldo = $bank->saldo - ($model->nominal + $model->fee);
                             $bank->saldo = $saldo;
                             $bank->save();
                         }

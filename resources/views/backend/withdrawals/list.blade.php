@@ -342,13 +342,6 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Status</label>
-                        <select name="status" class="custom-select" data-toggle="select2">
-                            <option value="0">Belum diproses</option>
-                            <option value="1">Done</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
                         <label for="fee">Biaya Admin</label>
                         <input type="text" class="form-control" id="fee"  name="fee"  placeholder="5.000.000" data-toggle="input-mask" data-mask-format="000.000.000.000.000" data-reverse="true">
                     </div>
