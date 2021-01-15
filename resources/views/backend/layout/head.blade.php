@@ -15,6 +15,7 @@
     <link href="{{asset('backend/css/custom.css')}} " rel="stylesheet" type="text/css"/>
     <link href="{{asset('backend/libs/select2/select2.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('backend/libs/animate.css/animate.css.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('backend/libs/jquery-toast-plugin/jquery-toast-plugin.min.css')}}" rel="stylesheet" type="text/css" />
     @yield('css')
     <link href="{{asset('backend/css/app.min.css')}} " rel="stylesheet" type="text/css" id="app-default-stylesheet" />
     <style>

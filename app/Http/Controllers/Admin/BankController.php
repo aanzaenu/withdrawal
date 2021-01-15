@@ -10,6 +10,7 @@ use App\User;
 use App\Bank;
 use App\Amount;
 use Illuminate\Support\Facades\File;
+use App\Events\NotificationPusherEvent;
 date_default_timezone_set('Asia/Jakarta');
 
 class BankController extends Controller
@@ -281,6 +282,7 @@ class BankController extends Controller
             ]);
             if($model)
             {
+                event(new NotificationPusherEvent(Auth::user()->name, 'hello world!!!'));
                 $request->session()->flash('success', 'Permintaan Suntik Dana terkirim.');
             }else{
                 $request->session()->flash('error', 'Error saat memproses data');

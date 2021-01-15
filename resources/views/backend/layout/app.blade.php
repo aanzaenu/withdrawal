@@ -44,6 +44,7 @@
     <script src="{{asset('backend/js/vendor.min.js')}}"></script>
     <script src="{{asset('backend/libs/select2/select2.min.js')}}"></script>
     <script src="{{asset('backend/libs/jquery-mask-plugin/jquery-mask-plugin.min.js')}}"></script>
+    <script src="{{asset('backend/libs/jquery-toast-plugin/jquery-toast-plugin.min.js')}}"></script>
     <script>
         $(document).ready(function(){
             $('select[data-toggle="select2"]').select2();
@@ -65,6 +66,30 @@
             });
         });
     </script>
+    @if (is_admin() || is_subadmin())        
+        <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+        <script>
+            var link = "{{ route('admin.amounts.index') }}";
+            var sound = new Audio("{{ asset('assets/sound/notif.mp3') }}");
+            Pusher.logToConsole = false;
+            var pusher = new Pusher('bc2af12caa5181e6f31b', {
+                cluster: 'ap1'
+            });
+            var channel = pusher.subscribe('my-channel');
+            channel.bind('my-event', function(data) {
+                var respon = JSON.stringify(data);
+                console.log(respon);
+                sound.play();
+                $.toast({
+                    text : '<a class="alert-link border-0" href="'+link+'">Permintaan Suntik Dana baru dari'+data.name+'</a>',
+                    position: 'top-right',
+                    loaderBg: '#437512;',
+                    icon: 'info',
+                    hideAfter: 10000,
+                })
+            });
+        </script>
+    @endif
     @yield('script')
     
     <script src="{{asset('backend/js/app.min.js')}}"></script>
