@@ -181,7 +181,7 @@
                     </div>
                     @if(count($lists) > 0)
                     <div class="table-responsive">
-                        <table class="table table-centered table-nowrap table-striped mb-0">
+                        <table class="table mytable table-centered table-nowrap table-striped mb-0">
                             <thead>
                                 <tr>
                                     @if (!is_cs())

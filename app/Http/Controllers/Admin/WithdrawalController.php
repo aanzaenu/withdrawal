@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
+use App\Events\NotificationPusherEvent;
 date_default_timezone_set('Asia/Jakarta');
 
 class WithdrawalController extends Controller
@@ -151,6 +152,7 @@ class WithdrawalController extends Controller
     
             if($withdrawal->save())
             {
+                event(new NotificationPusherEvent('withdrawal', Auth::user()->name, 'hello world!!!'));
                 $request->session()->flash('success', $this->title.' baru ditambahkan');
                 return redirect()->route('admin.'.$this->uri.'.index');
             }else{

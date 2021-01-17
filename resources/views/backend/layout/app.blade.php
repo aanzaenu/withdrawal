@@ -46,6 +46,7 @@
     <script src="{{asset('backend/libs/jquery-mask-plugin/jquery-mask-plugin.min.js')}}"></script>
     <script src="{{asset('backend/libs/jquery-toast-plugin/jquery-toast-plugin.min.js')}}"></script>
     <script>
+        var sound = new Audio("{{ asset('assets/sound/notif.mp3') }}");
         $(document).ready(function(){
             $('select[data-toggle="select2"]').select2();
             $('[data-toggle="input-mask"]').each(function (idx, obj) {
@@ -66,11 +67,10 @@
             });
         });
     </script>
-    @if (is_admin() || is_subadmin())        
+    @if (is_admin() || is_subadmin() || is_wd())        
         <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
         <script>
             var link = "{{ route('admin.amounts.index') }}";
-            var sound = new Audio("{{ asset('assets/sound/notif.mp3') }}");
             Pusher.logToConsole = false;
             var pusher = new Pusher('bc2af12caa5181e6f31b', {
                 cluster: 'ap1'
@@ -79,16 +79,53 @@
             channel.bind('my-event', function(data) {
                 var respon = JSON.stringify(data);
                 console.log(respon);
+                sound.pause();
                 sound.play();
-                $.toast({
-                    text : '<a class="alert-link border-0" href="'+link+'">Permintaan Suntik Dana baru dari '+data.name+'</a>',
-                    position: 'top-right',
-                    loaderBg: '#437512;',
-                    icon: 'info',
-                    hideAfter: 10000,
-                })
+                if(data.from == 'amount')
+                {
+                    $.toast({
+                        text : '<a class="alert-link border-0" href="'+link+'">Permintaan Suntik Dana baru dari '+data.name+'</a>',
+                        position: 'top-right',
+                        loaderBg: '#437512;',
+                        icon: 'info',
+                        hideAfter: 10000,
+                    });
+                }
+                if(data.from == 'withdrawal')
+                {
+                    $.toast({
+                        text : '<a class="alert-link border-0" href="'+link+'">Permintaan Withdrawal baru dari '+data.name+'</a>',
+                        position: 'top-right',
+                        loaderBg: '#437512;',
+                        icon: 'info',
+                        hideAfter: 10000,
+                    });
+                }
             });
         </script>
+    @endif
+    <script>
+        function play_notif()
+        {
+            sound.pause();
+            sound.play();
+        }
+    </script>
+    @if (is_admin() || is_subadmin())
+        @if (count_withdrawal() > 0 || count_amount() > 0)
+            <script>
+                play_notif();
+                setInterval(function(){play_notif()}, 7000);
+            </script>        
+        @endif
+    @endif
+    @if (is_wd())
+        @if (count_withdrawal() > 0)
+            <script>
+                play_notif();
+                setInterval(function(){play_notif()}, 7000);
+            </script>        
+        @endif
     @endif
     @yield('script')
     

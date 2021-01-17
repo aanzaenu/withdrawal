@@ -1,5 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Auth;
+use App\Withdrawal;
+use App\Amount;
 function is_admin()
 {
     if(Auth::check())
@@ -55,4 +57,22 @@ function is_login()
 function asset_url($string)
 {
     return env('APP_URL').$string;
+}
+function count_withdrawal()
+{
+    $model = Withdrawal::where('status', 0)->count();
+    if($model)
+    {
+        return $model;
+    }
+    return 0;
+}
+function count_amount()
+{
+    $model = Amount::where('status', 0)->count();
+    if($model)
+    {
+        return $model;
+    }
+    return 0;
 }

@@ -122,6 +122,16 @@
                 {{ $lists->withQueryString()->links() }}
             </div>
         </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card-box">
+                    <div class="d-block w-100">
+                        <h5 class="">Total Nominal : Rp.{{ number_format($nominals) }}</h5>
+                        <h5 class="">Total Biaya Admin : Rp.{{ number_format($fees) }}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     @include('backend.layout.ajaxmodal')
 @endsection

@@ -11,6 +11,13 @@
                     <li class="nav-item">
                         <a class="nav-link bg-amdbtn text-white" href="{{route('admin.withdrawals.index')}}">
                             <i class="fe-download-cloud mr-1"></i> Withdrawals
+                            @if (is_admin() || is_subadmin() || is_wd())                                
+                                @if (count_withdrawal() > 0)
+                                    <span class="badge badge-danger float-right blink-notif" style="margin-top: -5px">
+                                        {{ number_format(count_withdrawal()) }}
+                                    </span>
+                                @endif
+                            @endif
                         </a>
                     </li>
                     @if (is_admin() || is_subadmin() || is_wd())
@@ -34,7 +41,12 @@
                             @else
                                 <a class="nav-link bg-amdbtn text-white" href="{{ route('admin.amounts.index') }}">
                                     <i class="fe-plus-circle mr-1"></i> Suntik Dana
-                                </a>                                
+                                    @if (count_amount() > 0)
+                                        <span class="badge badge-danger float-right blink-notif" style="margin-top: -5px">
+                                            {{ number_format(count_amount()) }}
+                                        </span>
+                                    @endif
+                                </a>
                             @endif
                         </li>
                         <li class="nav-item">
@@ -76,3 +88,14 @@
         </nav>
     </div> <!-- end container-fluid -->
 </div> <!-- end topnav-->
+@if (is_admin() || is_subadmin() || is_wd())    
+    @section('script-bottom')
+    <script>
+        function blink_text() {
+            $('.blink-notif').fadeOut(500);
+            $('.blink-notif').fadeIn(500);
+        }
+        setInterval(blink_text, 1000);
+    </script>
+    @endsection
+@endif

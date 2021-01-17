@@ -282,7 +282,7 @@ class BankController extends Controller
             ]);
             if($model)
             {
-                event(new NotificationPusherEvent(Auth::user()->name, 'hello world!!!'));
+                event(new NotificationPusherEvent('amount', Auth::user()->name, 'hello world!!!'));
                 $request->session()->flash('success', 'Permintaan Suntik Dana terkirim.');
             }else{
                 $request->session()->flash('error', 'Error saat memproses data');

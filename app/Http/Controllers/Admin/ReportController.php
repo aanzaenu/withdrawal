@@ -41,10 +41,14 @@ class ReportController extends Controller
             if(!empty($request->get('orderby')) || !empty($request->get('operator')) || !empty($request->get('banks')) || !empty($request->get('from')) || !empty($request->get('to')) || $request->get('status') == 0 || !empty($request->get('status')))
             {
                 $model = Withdrawal::with('banks');
+                $all = Withdrawal::with('banks');
                 if($request->get('banks'))
                 {
                     $rol = $request->get('banks');
                     $model->whereHas('banks', function($query) use ($rol){
+                        $query->where('banks.id', $rol);
+                    });
+                    $all->whereHas('banks', function($query) use ($rol){
                         $query->where('banks.id', $rol);
                     });
                 }
@@ -53,11 +57,13 @@ class ReportController extends Controller
                     if($request->get('status') !== 'all')
                     {
                         $model->where('status', $request->get('status'));
+                        $all->where('status', $request->get('status'));
                     }
                 }
                 if(!empty($request->get('operator')))
                 {
                     $model->where('operator', $request->get('operator'));
+                    $all->where('operator', $request->get('operator'));
                 }
                 if(!empty($request->get('from')) && !empty($request->get('to')))
                 {
@@ -70,6 +76,9 @@ class ReportController extends Controller
 
                     $model->where('time', '>=', $sfrom);
                     $model->where('time', '<=', $sto);
+
+                    $all->where('time', '>=', $sfrom);
+                    $all->where('time', '<=', $sto);
                 }
                 if($request->get('orderby'))
                 {
@@ -88,6 +97,17 @@ class ReportController extends Controller
                 $data['uri'] = $this->uri;
                 $data['lists'] = $model->paginate(20);
                 $data['banks'] = Bank::orderBy('name', 'ASC')->get();
+                
+                $nominals = 0;
+                $fees = 0;
+                foreach($all->get() as $key=>$val)
+                {
+                    $nominals += $val->nominal;
+                    $fees += $val->fee;
+                }
+                $data['nominals'] = $nominals;
+                $data['fees'] = $fees;
+                
                 return view('backend.'.$this->uri.'.list', $data);
             }else{
                 return redirect()->route('admin.'.$this->uri.'.index');

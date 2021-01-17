@@ -14,10 +14,12 @@ class NotificationPusherEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     
+    public $from;
     public $name;
     public $message;
-    public function __construct($name, $message)
+    public function __construct($from, $name, $message)
     {
+        $this->from = $from;
         $this->name = $name;
         $this->message = $message;
     }
