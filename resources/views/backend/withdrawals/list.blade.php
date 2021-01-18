@@ -38,9 +38,9 @@
                         <div class="d-block w-100 mb-1">
                             <div class="table-responsive">
                                 <table class="table table-sm table-centered table-nowrap table-striped mb-0">
-                                    <thead>
+                                    <thead class="bg-amdbtn text-white text-uppercase">
                                         <tr>
-                                            <th>Image</th>
+                                            <th>Bank</th>
                                             <th>Nama</th>
                                             <th>Atas Nama Bank</th>
                                             <th>No. Rekening</th>
@@ -81,9 +81,9 @@
                         <div class="d-block w-100 mb-1">
                             <div class="table-responsive">
                                 <table class="table table-sm table-centered table-nowrap table-striped mb-0">
-                                    <thead>
+                                    <thead class="bg-amdbtn text-white text-uppercase">
                                         <tr>
-                                            <th>Image</th>
+                                            <th>Bank</th>
                                             <th>Nama</th>
                                             <th>Atas Nama Bank</th>
                                             <th>No. Rekening</th>
@@ -182,7 +182,7 @@
                     @if(count($lists) > 0)
                     <div class="table-responsive">
                         <table class="table mytable table-centered table-nowrap table-striped mb-0">
-                            <thead>
+                            <thead class="bg-amdbtn text-white text-uppercase">
                                 <tr>
                                     @if (!is_cs())
                                         <th>
@@ -228,23 +228,23 @@
                                         </th>                                        
                                     @endif
                                     <th class="sorting @if($order_by =='bank') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
-                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$bank.$operator.'orderby=bank&order='.$urut }}">
+                                        <a class="text-white" href="{{ route('admin.'.$uri.'.search').'?'.$bank.$operator.'orderby=bank&order='.$urut }}">
                                             Nama dan Rec
                                         </a>
                                     </th>
                                     <th class="sorting @if($order_by =='nominal') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
-                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$bank.$operator.'orderby=nominal&order='.$urut }}">
+                                        <a class="text-white" href="{{ route('admin.'.$uri.'.search').'?'.$bank.$operator.'orderby=nominal&order='.$urut }}">
                                             Nominal
                                         </a>
                                     </th>
                                     <th>Bank</th>
                                     <th class="sorting @if($order_by =='fee') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
-                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$bank.$operator.'orderby=fee&order='.$urut }}">
-                                            Biaya Admin
+                                        <a class="text-white" href="{{ route('admin.'.$uri.'.search').'?'.$bank.$operator.'orderby=fee&order='.$urut }}">
+                                            Biaya Adm
                                         </a>
                                     </th>
                                     <th class="sorting @if($order_by =='updated_at') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
-                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$bank.$operator.'orderby=updated_at&order='.$urut }}">
+                                        <a class="text-white" href="{{ route('admin.'.$uri.'.search').'?'.$bank.$operator.'orderby=updated_at&order='.$urut }}">
                                             Waktu Transfer
                                         </a>
                                     </th>

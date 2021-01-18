@@ -102,7 +102,7 @@ class WithdrawalExport implements FromCollection, WithHeadings, WithMapping, Wit
             'Nama dan Rec',
             'Nominal',
             'Bank',
-            'Biaya Admin',
+            'Biaya Adm',
             'Waktu Transfer',
             'Status'
         ];

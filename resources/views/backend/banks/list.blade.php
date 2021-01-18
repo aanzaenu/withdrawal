@@ -64,7 +64,7 @@
                     @if(count($lists) > 0)
                     <div class="table-responsive" style="padding-bottom: 155px;">
                         <table class="table mytable table-centered table-nowrap table-striped mb-0">
-                            <thead>
+                            <thead class="bg-amdbtn text-white text-uppercase">
                                 <tr>
                                     <th>
                                         <div class="checkbox checkbox-amdbtn checkbox-single">
@@ -94,22 +94,22 @@
                                     ;?>
                                     <th>Image</th>
                                     <th class="sorting @if($order_by =='name') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
-                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$kueri.'orderby=name&order='.$urut }}">
+                                        <a class="text-white" href="{{ route('admin.'.$uri.'.search').'?'.$kueri.'orderby=name&order='.$urut }}">
                                             Nama
                                         </a>
                                     </th>
                                     <th class="sorting @if($order_by =='bankname') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
-                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$kueri.'orderby=bankname&order='.$urut }}">
+                                        <a class="text-white" href="{{ route('admin.'.$uri.'.search').'?'.$kueri.'orderby=bankname&order='.$urut }}">
                                             Atas Nama Bank
                                         </a>
                                     </th>
                                     <th class="sorting @if($order_by =='rec') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
-                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$kueri.'orderby=rec&order='.$urut }}">
+                                        <a class="text-white" href="{{ route('admin.'.$uri.'.search').'?'.$kueri.'orderby=rec&order='.$urut }}">
                                             No. Rekening
                                         </a>
                                     </th>
                                     <th class="sorting @if($order_by =='saldo') @if($order == 'asc') sorting_asc @else sorting_desc @endif @endif">
-                                        <a class="text-dark" href="{{ route('admin.'.$uri.'.search').'?'.$kueri.'orderby=saldo&order='.$urut }}">
+                                        <a class="text-white" href="{{ route('admin.'.$uri.'.search').'?'.$kueri.'orderby=saldo&order='.$urut }}">
                                             Saldo
                                         </a>
                                     </th>

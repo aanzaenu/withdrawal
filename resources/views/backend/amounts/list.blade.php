@@ -75,7 +75,7 @@
                     @if(count($lists) > 0)
                     <div class="table-responsive" style="padding-bottom: 155px;">
                         <table class="table table-centered table-nowrap table-striped mb-0">
-                            <thead>
+                            <thead class="bg-amdbtn text-white text-uppercase">
                                 <tr>
                                     <th>
                                         <div class="checkbox checkbox-amdbtn checkbox-single">
