@@ -30,6 +30,8 @@ class WithdrawalController extends Controller
             $data['pagetitle'] = $this->title;
             $data['uri'] = $this->uri;
             $data['banks'] = Bank::orderBy('name', 'ASC')->get();
+            $data['banks1'] = Bank::where('wd', 1)->orderBy('name', 'ASC')->get();
+            $data['banks2'] = Bank::where('wd', 2)->orderBy('name', 'ASC')->get();
             $data['operators'] = User::with('roles')->whereHas('roles', function($query){
                                     $query->where('roles.id', 3);
                                 })->orderBy('name', 'ASC')->get();
@@ -83,6 +85,8 @@ class WithdrawalController extends Controller
                 $data['pagetitle'] = "Pencarian ".$this->title;
                 $data['uri'] = $this->uri;
                 $data['banks'] = Bank::orderBy('name', 'ASC')->get();
+                $data['banks1'] = Bank::where('wd', 1)->orderBy('name', 'ASC')->get();
+                $data['banks2'] = Bank::where('wd', 2)->orderBy('name', 'ASC')->get();
                 $data['operators'] = User::with('roles')->whereHas('roles', function($query){
                                         $query->where('roles.id', 3);
                                     })->orderBy('name', 'ASC')->get();

@@ -62,6 +62,19 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
+                                    <label for="wd">WD</label>
+                                    <select name="wd" class="custom-select" data-method="select2">
+                                        <option value="">WD 1</option>
+                                        <option value="1" {{ $row->wd == 1 ? 'selected' : '' }}>WD 1</option>
+                                        <option value="2" {{ $row->wd == 2 ? 'selected' : '' }}>WD 2</option>
+                                    </select>
+                                    @error('wd')
+                                        <div class="invalid-feedback" role="feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
                                     <label for="file">Image</label>
                                     <div class="input-group  @if($errors->has('file')) is-invalid @endif">
                                         <div class="custom-file">

@@ -113,6 +113,7 @@
                                             Saldo
                                         </a>
                                     </th>
+                                    <th>WD</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -130,6 +131,7 @@
                                     <td>{{ $list->bankname }}</td>
                                     <td>{{ $list->rec }}</td>
                                     <td>Rp. {{ number_format($list->saldo) }}</td>
+                                    <td>{{ $list->wd == 1 ? 'WD 1' : 'WD 2' }}</td>
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-amdbtn btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

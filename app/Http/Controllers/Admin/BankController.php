@@ -101,6 +101,7 @@ class BankController extends Controller
                     'bankname' => ['required'],
                     'rec' => ['required'],
                     'saldo' => ['required'],
+                    'wd' => ['required'],
                     'file' => [$requestfile],
                 ];
             $msg = [
@@ -108,6 +109,7 @@ class BankController extends Controller
                 'bankname.required' => 'Atas Nama Bank tidak boleh kosong',
                 'rec.required' => 'Nomor Rekening Bank tidak boleh kosong',
                 'saldo.required' => 'Saldo Bank tidak boleh kosong',
+                'wd.required' => 'WD tidak boleh kosong',
                 'file.mimes' => 'File tidak didukung',
                 'file.max' => 'Ukuran maksimal 2Mb',
             ];
@@ -116,6 +118,7 @@ class BankController extends Controller
             $bank->name = trim($request->name);
             $bank->bankname = trim($request->bankname);
             $bank->rec = trim($request->rec);
+            $bank->wd = trim($request->wd);
             $bank->saldo = Str::slug(trim($request->saldo), '');
             if($request->file)
             {
@@ -172,6 +175,7 @@ class BankController extends Controller
                     'bankname' => ['required'],
                     'rec' => ['required'],
                     'saldo' => ['required'],
+                    'wd' => ['required'],
                     'file' => [$requestfile],
                 ];
             $msg = [
@@ -179,6 +183,7 @@ class BankController extends Controller
                 'bankname.required' => 'Atas Nama Bank tidak boleh kosong',
                 'rec.required' => 'Nomor Rekening Bank tidak boleh kosong',
                 'saldo.required' => 'Saldo Bank tidak boleh kosong',
+                'wd.required' => 'WD tidak boleh kosong',
                 'file.mimes' => 'File tidak didukung',
                 'file.max' => 'Ukuran maksimal 2Mb',
             ];
@@ -187,6 +192,7 @@ class BankController extends Controller
             $bank->name = trim($request->name);
             $bank->bankname = trim($request->bankname);
             $bank->rec = trim($request->rec);
+            $bank->wd = trim($request->rec);
             $bank->saldo = Str::slug(trim($request->saldo), '');
             if($request->file)
             {

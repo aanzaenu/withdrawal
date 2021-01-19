@@ -35,6 +35,7 @@
             <div class="row">
                 <div class="col-md-{{ count($banks) > 4 ? '6' : '12' }}">
                     <div class="card-box">
+                        <h4 class="header-title">WD 1</h4>
                         <div class="d-block w-100 mb-1">
                             <div class="table-responsive">
                                 <table class="table table-sm table-centered table-nowrap table-striped mb-0">
@@ -48,19 +49,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php
-                                            $ofset = 0;
-                                            $ofset = ceil(count($banks) / 2);
-                                            if(count($banks) - $ofset <= $ofset){
-                                                $ofset = $ofset+1;
-                                            }
-                                        @endphp
-                                        @foreach ($banks as $key=>$list)
-                                        @php
-                                            if ($key + 1 == $ofset && count($banks) > 4) {
-                                                break;
-                                            }
-                                        @endphp
+                                        @foreach ($banks1 as $key=>$list)
                                             <tr>
                                                 <td>{!! $list->image ? '<img src="'.asset($list->image).'" class="img-thumbnail" style="max-width:30px;"/>' : '' !!}</td>
                                                 <td>{{ $list->name }}</td>
@@ -75,9 +64,9 @@
                         </div>
                     </div>
                 </div>
-                @if (count($banks) > 4)
                 <div class="col-md-6">
                     <div class="card-box">
+                        <h4 class="header-title">WD 2</h4>
                         <div class="d-block w-100 mb-1">
                             <div class="table-responsive">
                                 <table class="table table-sm table-centered table-nowrap table-striped mb-0">
@@ -91,13 +80,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($banks as $key=>$list)
-                                            @php
-                                                if($key+1 < $ofset)
-                                                {
-                                                    continue;
-                                                }
-                                            @endphp
+                                        @foreach ($banks2 as $key=>$list)
                                             <tr>
                                                 <td>{!! $list->image ? '<img src="'.asset($list->image).'" class="img-thumbnail" style="max-width:30px;"/>' : '' !!}</td>
                                                 <td>{{ $list->name }}</td>
@@ -111,8 +94,7 @@
                             </div>
                         </div>
                     </div>
-                </div>                
-                @endif
+                </div>
             </div>            
         @endif
         <div class="row">
