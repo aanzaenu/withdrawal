@@ -64,7 +64,7 @@
                                 <div class="form-group">
                                     <label for="wd">WD</label>
                                     <select name="wd" class="custom-select" data-method="select2">
-                                        <option value="">WD 1</option>
+                                        <option value="">Select WD</option>
                                         <option value="1" {{ old('wd') == 1 ? 'selected' : '' }}>WD 1</option>
                                         <option value="2" {{ old('wd') == 2 ? 'selected' : '' }}>WD 2</option>
                                     </select>
