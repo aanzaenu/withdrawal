@@ -192,7 +192,7 @@ class BankController extends Controller
             $bank->name = trim($request->name);
             $bank->bankname = trim($request->bankname);
             $bank->rec = trim($request->rec);
-            $bank->wd = trim($request->rec);
+            $bank->wd = trim($request->wd);
             $bank->saldo = Str::slug(trim($request->saldo), '');
             if($request->file)
             {

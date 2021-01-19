@@ -63,7 +63,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="wd">WD</label>
-                                    <select name="wd" class="custom-select" data-method="select2">
+                                    <select name="wd" class="custom-select @if($errors->has('wd')) is-invalid @endif" data-toggle="select2">
                                         <option value="">Select WD</option>
                                         <option value="1" {{ $row->wd == 1 ? 'selected' : '' }}>WD 1</option>
                                         <option value="2" {{ $row->wd == 2 ? 'selected' : '' }}>WD 2</option>
