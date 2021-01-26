@@ -33,68 +33,72 @@
         @endif
         @if (!is_cs())
             <div class="row">
-                <div class="col-md-{{ count($banks) > 4 ? '6' : '12' }}">
-                    <div class="card-box">
-                        <h4 class="header-title">WD 1</h4>
-                        <div class="d-block w-100 mb-1">
-                            <div class="table-responsive">
-                                <table class="table table-sm table-centered table-nowrap table-striped mb-0">
-                                    <thead class="bg-amdbtn text-white text-uppercase">
-                                        <tr>
-                                            <th>Bank</th>
-                                            <th>Nama</th>
-                                            <th>Atas Nama Bank</th>
-                                            <th>No. Rekening</th>
-                                            <th>Saldo</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($banks1 as $key=>$list)
+                @if (count($banks) > 0)
+                    <div class="col-md-6">
+                        <div class="card-box">
+                            <h4 class="header-title">WD 1</h4>
+                            <div class="d-block w-100 mb-1">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-centered table-nowrap table-striped mb-0">
+                                        <thead class="bg-amdbtn text-white text-uppercase">
                                             <tr>
-                                                <td>{!! $list->image ? '<img src="'.asset($list->image).'" class="img-thumbnail" style="max-width:30px;"/>' : '' !!}</td>
-                                                <td>{{ $list->name }}</td>
-                                                <td>{{ $list->bankname }}</td>
-                                                <td>{{ $list->rec }}</td>
-                                                <td>Rp. {{ number_format($list->saldo) }}</td>
+                                                <th>Bank</th>
+                                                <th>Nama</th>
+                                                <th>Atas Nama Bank</th>
+                                                <th>No. Rekening</th>
+                                                <th>Saldo</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($banks1 as $key=>$list)
+                                                <tr>
+                                                    <td>{!! $list->image ? '<img src="'.asset($list->image).'" class="img-thumbnail" style="max-width:30px;"/>' : '' !!}</td>
+                                                    <td>{{ $list->name }}</td>
+                                                    <td>{{ $list->bankname }}</td>
+                                                    <td>{{ $list->rec }}</td>
+                                                    <td>Rp. {{ number_format($list->saldo) }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card-box">
-                        <h4 class="header-title">WD 2</h4>
-                        <div class="d-block w-100 mb-1">
-                            <div class="table-responsive">
-                                <table class="table table-sm table-centered table-nowrap table-striped mb-0">
-                                    <thead class="bg-amdbtn text-white text-uppercase">
-                                        <tr>
-                                            <th>Bank</th>
-                                            <th>Nama</th>
-                                            <th>Atas Nama Bank</th>
-                                            <th>No. Rekening</th>
-                                            <th>Saldo</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($banks2 as $key=>$list)
+                    </div>                    
+                @endif
+                @if (count($banks2) > 0)
+                    <div class="col-md-6">
+                        <div class="card-box">
+                            <h4 class="header-title">WD 2</h4>
+                            <div class="d-block w-100 mb-1">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-centered table-nowrap table-striped mb-0">
+                                        <thead class="bg-amdbtn text-white text-uppercase">
                                             <tr>
-                                                <td>{!! $list->image ? '<img src="'.asset($list->image).'" class="img-thumbnail" style="max-width:30px;"/>' : '' !!}</td>
-                                                <td>{{ $list->name }}</td>
-                                                <td>{{ $list->bankname }}</td>
-                                                <td>{{ $list->rec }}</td>
-                                                <td>Rp. {{ number_format($list->saldo) }}</td>
+                                                <th>Bank</th>
+                                                <th>Nama</th>
+                                                <th>Atas Nama Bank</th>
+                                                <th>No. Rekening</th>
+                                                <th>Saldo</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($banks2 as $key=>$list)
+                                                <tr>
+                                                    <td>{!! $list->image ? '<img src="'.asset($list->image).'" class="img-thumbnail" style="max-width:30px;"/>' : '' !!}</td>
+                                                    <td>{{ $list->name }}</td>
+                                                    <td>{{ $list->bankname }}</td>
+                                                    <td>{{ $list->rec }}</td>
+                                                    <td>Rp. {{ number_format($list->saldo) }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </div>                    
+                @endif
             </div>            
         @endif
         <div class="row">
